@@ -7,7 +7,6 @@ public class PlayerCore : MonoBehaviour
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
     public float speed = 5f;
-    public float knightAtkRange = 1.2f;
     public float knightAtkRate = 2f;
     public float knightNxtAtk = 0f;
     public int knightDamage = 1;
