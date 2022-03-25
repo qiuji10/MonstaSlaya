@@ -5,14 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
     public float knightAtkRange = 1.2f;
-    public float knightAtkRate = 2f;
-    public float knightNxtAtk = 0f;
 
     public Transform knightAtkPoint;
     Rigidbody2D rb;
     Animator animator;
+    PlayerCore playerCore;
 
     public LayerMask enemyLayers;
     Vector2 movement;
@@ -21,6 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        playerCore = GetComponent<PlayerCore>();
     }
 
     void Update()
@@ -30,15 +29,15 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            SwitchCharacter();
+            playerCore.SwitchCharacter();
         }
 
-        if (Time.time >= knightNxtAtk && animator.GetBool("becomeKnight"))
+        if (Time.time >= playerCore.knightNxtAtk && playerCore.playerState == PlayerCore.Character.KNIGHT)
         {
             if (Input.GetKeyDown(KeyCode.J))
             {
                 KnightAttack();
-                knightNxtAtk = Time.time + 1f / knightAtkRate;
+                playerCore.knightNxtAtk = Time.time + 1f / playerCore.knightAtkRate;
             }
         }
 
@@ -63,27 +62,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
     }
 
-    public void SwitchCharacter()
-    {
-        if (animator.GetBool("becomeKnight"))
-        {
-            animator.SetBool("becomeArcher", true);
-            animator.SetBool("becomeKnight", false);
-        }
-        else if (animator.GetBool("becomeArcher"))
-        {
-            animator.SetBool("becomeAssassin", true);
-            animator.SetBool("becomeArcher", false);
-        }
-        else if (animator.GetBool("becomeAssassin"))
-        {
-            animator.SetBool("becomeKnight", true);
-            animator.SetBool("becomeAssassin", false);
-        }
-    }
+    
 
     void KnightAttack()
     {
@@ -93,7 +75,7 @@ public class PlayerController : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hitting enemy");
-            //enemy.GetComponent<Enemy>().TakeDamage(knightDamage);
+            enemy.GetComponent<Enemy>().Stats.TakeDamage(playerCore.knightDamage);
         }
     }
 
