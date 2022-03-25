@@ -62,13 +62,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (animator.GetBool("becomeArcher"))
         {
-            animator.SetBool("becomeAssasin", true);
+            animator.SetBool("becomeAssassin", true);
             animator.SetBool("becomeArcher", false);
         }
-        else if (animator.GetBool("becomeAssasin"))
+        else if (animator.GetBool("becomeAssassin"))
         {
             animator.SetBool("becomeKnight", true);
-            animator.SetBool("becomeAssasin", false);
+            animator.SetBool("becomeAssassin", false);
         }
     }
 }
