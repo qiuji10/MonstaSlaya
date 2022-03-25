@@ -9,12 +9,14 @@ public class PlayerController : MonoBehaviour
 
     public GameObject C1, C2, C3;
     Rigidbody2D rb;
+    Animator animator;
 
     Vector2 movement;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -26,6 +28,24 @@ public class PlayerController : MonoBehaviour
         {
             SwitchCharacter();
         }
+
+        if (movement.x != 0 || movement.y != 0)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+
+        if (movement.x < 0)
+        {
+            gameObject.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
+        }
+        else if (movement.x > 0)
+        {
+            gameObject.transform.localScale = new Vector3(1.5f, 1.5f, 1);
+        }
     }
 
     void FixedUpdate()
@@ -35,20 +55,20 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchCharacter()
     {
-        if (C1.activeInHierarchy)
+        if (animator.GetBool("becomeKnight"))
         {
-            C1.SetActive(false);
-            C2.SetActive(true);
+            animator.SetBool("becomeArcher", true);
+            animator.SetBool("becomeKnight", false);
         }
-        else if (C2.activeInHierarchy)
+        else if (animator.GetBool("becomeArcher"))
         {
-            C2.SetActive(false);
-            C3.SetActive(true);
+            animator.SetBool("becomeAssasin", true);
+            animator.SetBool("becomeArcher", false);
         }
-        else if (C3.activeInHierarchy)
+        else if (animator.GetBool("becomeAssasin"))
         {
-            C3.SetActive(false);
-            C1.SetActive(true);
+            animator.SetBool("becomeKnight", true);
+            animator.SetBool("becomeAssasin", false);
         }
     }
 }
