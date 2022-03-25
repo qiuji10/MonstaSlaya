@@ -6,11 +6,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
+    public float knightAtkRange = 1.2f;
+    public float knightAtkRate = 2f;
+    public float knightNxtAtk = 0f;
 
-    public GameObject C1, C2, C3;
+    public Transform knightAtkPoint;
     Rigidbody2D rb;
     Animator animator;
 
+    public LayerMask enemyLayers;
     Vector2 movement;
 
     void Awake()
@@ -27,6 +31,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             SwitchCharacter();
+        }
+
+        if (Time.time >= knightNxtAtk && animator.GetBool("becomeKnight"))
+        {
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                KnightAttack();
+                knightNxtAtk = Time.time + 1f / knightAtkRate;
+            }
         }
 
         if (movement.x != 0 || movement.y != 0)
@@ -70,5 +83,25 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("becomeKnight", true);
             animator.SetBool("becomeAssassin", false);
         }
+    }
+
+    void KnightAttack()
+    {
+        animator.SetTrigger("KnightAttack");
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(knightAtkPoint.position, knightAtkRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Hitting enemy");
+            //enemy.GetComponent<Enemy>().TakeDamage(knightDamage);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (knightAtkPoint == null)
+            return;
+
+        Gizmos.DrawWireSphere(knightAtkPoint.position, knightAtkRange);
     }
 }
