@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     PlayerCore playerCore;
 
     public LayerMask enemyLayers;
-    Vector2 movement;
+    public Vector2 movement;
 
     void Awake()
     {
@@ -41,31 +41,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (movement.x != 0 || movement.y != 0)
-        {
-            animator.SetBool("isWalking", true);
-        }
-        else
-        {
-            animator.SetBool("isWalking", false);
-        }
-
-        if (movement.x < 0)
-        {
-            gameObject.transform.localScale = new Vector3(-1.5f, 1.5f, 1);
-        }
-        else if (movement.x > 0)
-        {
-            gameObject.transform.localScale = new Vector3(1.5f, 1.5f, 1);
-        }
+        
     }
 
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
     }
-
-    
 
     void KnightAttack()
     {
