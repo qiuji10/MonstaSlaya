@@ -2915,7 +2915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 950753383}
   m_Layer: 0
-  m_Name: MeleeAttackPoint
+  m_Name: KnightAttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
