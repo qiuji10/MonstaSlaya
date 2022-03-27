@@ -7,11 +7,11 @@ public class ClosestEnemy : MonoBehaviour
     public void FindClosestEnemy(ref Vector3 enemyPosition)
     {
         float distanceToClosestEnemy = Mathf.Infinity;
-        Enemy closestEnemy = null;
+        Enemy1 closestEnemy = null;
 
-        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+        Enemy1[] allEnemies = FindObjectsOfType<Enemy1>();
 
-        foreach (Enemy currentEnemy in allEnemies)
+        foreach (Enemy1 currentEnemy in allEnemies)
         {
             float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
             if (distanceToEnemy < distanceToClosestEnemy)

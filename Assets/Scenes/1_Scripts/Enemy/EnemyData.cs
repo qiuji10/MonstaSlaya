@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class EnemyStats
+public class EnemyData : MonoBehaviour
 {
     public int maxHealth;
     public int currenthealth;
     public int damage;
     public int speed;
 
-    public void TakeDamage(int damage)
-    {
-        currenthealth -= damage;
+    public Transform target;
 
+    public void TakeDamage(int damaged)
+    {
+        currenthealth -= damaged;
+        
         if (currenthealth <= 0)
         {
-            Debug.Log("Enemy Die");
+            Debug.Log("EnemyDie");
         }
     }
 }

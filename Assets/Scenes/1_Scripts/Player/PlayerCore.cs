@@ -148,7 +148,7 @@ public class PlayerCore : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().Stats.TakeDamage(knightDamage);
+            enemy.GetComponent<Enemy>().TakeDamage(knightDamage);
         }
     }
 
@@ -156,6 +156,7 @@ public class PlayerCore : MonoBehaviour
     {
         animator.SetTrigger("ArcherAttack");
 
+        //a bit weird for here
         Vector3 offset = new Vector3(archerAim.position.x - 100, archerAim.position.y, archerAim.position.z);
         GameObject arrow = Instantiate(this.arrow, offset, Quaternion.identity);
         arrow.transform.position = archerAim.position;
@@ -189,7 +190,7 @@ public class PlayerCore : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().Stats.TakeDamage(assassinDamage);
+            enemy.GetComponent<Enemy>().TakeDamage(assassinDamage);
         }
     }
 
@@ -213,6 +214,11 @@ public class PlayerCore : MonoBehaviour
             animator.SetBool("becomeKnight", true);
             animator.SetBool("becomeAssassin", false);
         }
+    }
+
+    public void PlayerDamaged(int damage)
+    {
+        Debug.Log("Hitting player");
     }
 
     private void OnTriggerEnter2D(Collider2D col)

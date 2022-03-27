@@ -2,21 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : EnemyData
 {
-    [SerializeField] EnemyStats stats;
-
-    public EnemyStats Stats
-    {
-        get => stats;
-        set => stats = value;
-    }
 
     void Start()
     {
-        stats.currenthealth = stats.maxHealth;
+        currenthealth = maxHealth;
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
+    // Update is called once per frame
     void Update()
     {
         
