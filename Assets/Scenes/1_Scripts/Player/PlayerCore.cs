@@ -8,16 +8,36 @@ public class PlayerCore : MonoBehaviour
 
     public bool enemyInRange;
     public float speed = 5f;
-    public float knightAtkRate = 2f;
-    public float knightNxtAtk = 0f;
-    public int knightDamage = 1;
 
     public ClosestEnemy closestEnemy;
     Animator animator;
     PlayerController playerController;
 
+    [Header("Knight")]
+    public Transform knightAtkPoint;
+    public float knightAtkRate = 0.5f;
+    public float knightAtkCD = 0f;
+    public int knightDamage = 1;
+    public float knightAtkRange = 1.2f;
+    [Space(20)]
+
+    [Header("Archer")]
+    public Transform archerAim;
+    public GameObject arrow;
+    public float archerAtkRate = 0.8f;
+    public float archerAtkCD = 0f;
+    Vector3 archerAimDirection, facingDirection;
+    [Space(20)]
+
+    [Header("Assassin")]
+    public Transform assassinAtkPoint;
+    public int assassinDamage = 1;
+    public float assassinAtkRange = 1f;
+    [Space(20)]
+
     public Character playerState = Character.KNIGHT;
-    public Vector3 enemyPos;
+    public LayerMask enemyLayers;
+    Vector3 enemyPos;
     Vector3 facingRight = new Vector3(1.5f, 1.5f, 1);
     Vector3 facingLeft = new Vector3(-1.5f, 1.5f, 1);
 
@@ -38,6 +58,7 @@ public class PlayerCore : MonoBehaviour
         if (playerController.movement.x != 0 || playerController.movement.y != 0)
         {
             animator.SetBool("isWalking", true);
+            facingDirection = new Vector2(playerController.movement.x, playerController.movement.y);
         }
         else
         {
@@ -66,6 +87,109 @@ public class PlayerCore : MonoBehaviour
             {
                 gameObject.transform.localScale = facingRight;
             }
+        }
+
+        if (playerState == Character.ARCHER)
+        {
+            if (enemyInRange)
+            {
+                archerAimDirection = (enemyPos - transform.position).normalized;
+
+                float angle = Mathf.Atan2(archerAimDirection.y, archerAimDirection.x) * Mathf.Rad2Deg;
+
+                if (enemyPos.x < transform.position.x)
+                {
+                    archerAim.eulerAngles = new Vector3(0, 0, angle - 180);
+                }
+                else if (enemyPos.x > transform.position.x)
+                {
+                    archerAim.eulerAngles = new Vector3(0, 0, angle);
+                }
+            }
+
+            else
+            {
+                //rotate bow but not complete
+                if ((playerState == Character.ARCHER))
+                {
+                    //float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
+                    //if (playerController.movement.x > 0)
+                    //{
+                    //    archerAim.eulerAngles = new Vector3(0, 0, angle);
+                    //}
+                    //else if (playerController.movement.x < 0)
+                    //{
+                    //    archerAim.eulerAngles = new Vector3(0, 0, angle - 180);
+                    //}
+                    //else if (playerController.movement.y > 0)
+                    //{
+                    //    archerAim.eulerAngles = new Vector3(0, 0, 90);
+                    //}
+                    float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
+                    if (playerController.movement.x > 0)
+                    {
+                        archerAim.transform.eulerAngles = Vector3.forward * angle;
+                    }
+                    else if (playerController.movement.x < 0)
+                    {
+                        angle += 180;
+                        archerAim.transform.eulerAngles = Vector3.forward * angle;
+                    }
+                }
+            }
+        }
+    }
+
+    public void KnightAttack()
+    {
+        animator.SetTrigger("KnightAttack");
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(knightAtkPoint.position, knightAtkRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Hitting enemy");
+            enemy.GetComponent<Enemy>().Stats.TakeDamage(knightDamage);
+        }
+    }
+
+    public void ArcherAttack()
+    {
+        animator.SetTrigger("ArcherAttack");
+
+        Vector3 offset = new Vector3(archerAim.position.x - 100, archerAim.position.y, archerAim.position.z);
+        GameObject arrow = Instantiate(this.arrow, offset, Quaternion.identity);
+        arrow.transform.position = archerAim.position;
+
+        if (enemyPos.x < transform.position.x && enemyInRange)
+        {
+            archerAim.rotation *= Quaternion.Euler(0, 0, -270);
+        }
+        else if (enemyPos.x > transform.position.x && enemyInRange)
+        {
+            archerAim.rotation *= Quaternion.Euler(0, 0, 270);
+        }
+
+        if (enemyInRange)
+        {
+            arrow.GetComponent<Arrow>().direction = archerAimDirection;
+            arrow.transform.rotation = archerAim.rotation;
+        }
+        else
+        {
+            arrow.GetComponent<Arrow>().direction = facingDirection.normalized;
+            float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
+            arrow.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        }        
+    }
+
+    public void AssassinAttack()
+    {
+        animator.SetTrigger("AssassinAttack");
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(assassinAtkPoint.position, assassinAtkRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Hitting enemy");
+            enemy.GetComponent<Enemy>().Stats.TakeDamage(assassinDamage);
         }
     }
 
@@ -113,5 +237,17 @@ public class PlayerCore : MonoBehaviour
         {
             enemyInRange = false;
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (knightAtkPoint == null)
+            return;
+
+        if (assassinAtkPoint == null)
+            return;
+
+        Gizmos.DrawWireSphere(knightAtkPoint.position, knightAtkRange);
+        Gizmos.DrawWireSphere(assassinAtkPoint.position, assassinAtkRange);
     }
 }

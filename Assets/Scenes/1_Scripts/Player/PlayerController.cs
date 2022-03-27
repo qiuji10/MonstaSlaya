@@ -5,14 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    public float knightAtkRange = 1.2f;
-
-    public Transform knightAtkPoint;
     Rigidbody2D rb;
     Animator animator;
     PlayerCore playerCore;
 
-    public LayerMask enemyLayers;
     public Vector2 movement;
 
     void Awake()
@@ -32,40 +28,48 @@ public class PlayerController : MonoBehaviour
             playerCore.SwitchCharacter();
         }
 
-        if (Time.time >= playerCore.knightNxtAtk && playerCore.playerState == PlayerCore.Character.KNIGHT)
+        //if (Time.time >= playerCore.knightNxtAtk && playerCore.playerState == PlayerCore.Character.KNIGHT)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.J))
+        //    {
+        //        playerCore.KnightAttack();
+        //        playerCore.knightNxtAtk = Time.time + 1f / playerCore.knightAtkRate;
+        //    }
+        //}
+
+        if (playerCore.playerState == PlayerCore.Character.KNIGHT)
+        {
+            if (playerCore.knightAtkCD < playerCore.knightAtkRate)
+                playerCore.knightAtkCD += Time.deltaTime;
+
+            else if (playerCore.knightAtkCD >= playerCore.knightAtkRate && Input.GetKeyDown(KeyCode.J))
+            {
+                playerCore.knightAtkCD = 0;
+                playerCore.KnightAttack();
+            }
+        }
+        else if (playerCore.playerState == PlayerCore.Character.ARCHER)
+        {
+            if (playerCore.archerAtkCD < playerCore.archerAtkRate)
+                playerCore.archerAtkCD += Time.deltaTime;
+
+            else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetKeyDown(KeyCode.J))
+            {
+                playerCore.archerAtkCD = 0;
+                playerCore.ArcherAttack();
+            }
+        }
+        else if (playerCore.playerState == PlayerCore.Character.ASSASSIN)
         {
             if (Input.GetKeyDown(KeyCode.J))
             {
-                KnightAttack();
-                playerCore.knightNxtAtk = Time.time + 1f / playerCore.knightAtkRate;
+                playerCore.AssassinAttack();
             }
         }
-
-        
     }
 
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
-    }
-
-    void KnightAttack()
-    {
-        animator.SetTrigger("KnightAttack");
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(knightAtkPoint.position, knightAtkRange, enemyLayers);
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().Stats.TakeDamage(playerCore.knightDamage);
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (knightAtkPoint == null)
-            return;
-
-        Gizmos.DrawWireSphere(knightAtkPoint.position, knightAtkRange);
     }
 }
