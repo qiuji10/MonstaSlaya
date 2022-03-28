@@ -6,7 +6,6 @@ public class Enemy1 : MonoBehaviour
 {
     public enum EnemyState { REST, ATTACK }
 
-    public float attackRange;
     [SerializeField] float minDistance;
     private float latestDirectionChangeTime;
     private float directionChangeTime;
@@ -14,12 +13,9 @@ public class Enemy1 : MonoBehaviour
     public float restTime;
     public float maxRestTime;
 
-    public Transform attackPoint;
-    public LayerMask playerLayer;
     public Enemy enemy;
     Rigidbody2D rb;
     Animator animator;
-    
 
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
@@ -53,7 +49,6 @@ public class Enemy1 : MonoBehaviour
             animator.SetBool("isWalking", false);
     }
 
-    //Moving towards Player with a distance of 4 (Attack)
     void FixedUpdate()
     {
         if (enemyState == EnemyState.ATTACK)
@@ -78,25 +73,6 @@ public class Enemy1 : MonoBehaviour
             else
             {
                 //attack
-                //Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
-                //foreach (Collider2D player in hitPlayer)
-                //{
-                //    if (!player.isTrigger)
-                //    {
-                //        animator.SetTrigger("WolfAttack");
-
-                //        if (Vector2.Distance(attackPoint.position, enemy.target.position) < attackRange)
-                //        {
-                //            player.GetComponent<PlayerCore>().PlayerDamaged(enemy.damage);
-                //        }
-
-                //    }
-
-                //    if (player.isTrigger)
-                //    {
-                //        continue;
-                //    }
-                //}
                 animator.SetTrigger("WolfAttack");
                 maxRestTime = Random.Range(3, 8);
                 enemyState = EnemyState.REST;
@@ -159,12 +135,4 @@ public class Enemy1 : MonoBehaviour
         else
             movementPerSecond = new Vector2(0, 0);
     }
-
-    //private void OnDrawGizmosSelected()
-    //{
-    //    if (attackPoint == null)
-    //        return;
-
-    //    Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    //}
 }
