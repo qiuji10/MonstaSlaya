@@ -8,7 +8,7 @@ public class EnemyData : MonoBehaviour
     public int maxHealth;
     public int currenthealth;
     public int damage;
-    public int speed;
+    public float speed;
 
     public Transform target;
 

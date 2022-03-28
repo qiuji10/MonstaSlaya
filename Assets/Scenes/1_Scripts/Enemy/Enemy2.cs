@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1 : MonoBehaviour
+public class Enemy2 : MonoBehaviour
 {
     public enum EnemyState { REST, ATTACK }
 
@@ -54,7 +54,7 @@ public class Enemy1 : MonoBehaviour
         if (enemyState == EnemyState.ATTACK)
         {
             stateTime += Time.deltaTime;
-            if (stateTime >= 6)
+            if (stateTime >= 10)
             {
                 stateTime = 0;
                 enemyState = EnemyState.REST;
@@ -73,7 +73,7 @@ public class Enemy1 : MonoBehaviour
             else
             {
                 //attack
-                animator.SetTrigger("WolfAttack");
+                animator.SetTrigger("TrollAttack");
                 maxStateTime = Random.Range(3, 8);
                 enemyState = EnemyState.REST;
             }
