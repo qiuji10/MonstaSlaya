@@ -67,7 +67,7 @@ public class Enemy2 : MonoBehaviour
 
             if (Vector2.Distance(transform.position, enemy.target.position) > minDistance)
             {
-                transform.position = Vector2.MoveTowards(transform.position, enemy.target.position, enemy.speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, enemy.target.position, (enemy.speed + 2) * Time.deltaTime);
                 //rb.MovePosition(Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime));
             }
             else
@@ -95,7 +95,7 @@ public class Enemy2 : MonoBehaviour
                 enemyState = EnemyState.ATTACK;
             }
 
-            //if the changeTime was reached, calculate a new movement vector
+            //if the changeTime was reached, calculate a new timer and movement vector
             if (Time.time - latestDirectionChangeTime > directionChangeTime)
             {
                 latestDirectionChangeTime = Time.time;
@@ -111,7 +111,7 @@ public class Enemy2 : MonoBehaviour
         //random direction change time
         directionChangeTime = Random.Range(1, 4);
 
-        //random direction
+        //track player direction + random direction
         if (transform.position.x > enemy.target.position.x)
         {
             if (transform.position.y > enemy.target.position.y)

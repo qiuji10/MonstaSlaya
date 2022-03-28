@@ -143,21 +143,14 @@ public class PlayerCore : MonoBehaviour
     public void KnightAttack()
     {
         animator.SetTrigger("KnightAttack");
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(knightAtkPoint.position, knightAtkRange, enemyLayers);
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().TakeDamage(knightDamage);
-        }
+        MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage);
     }
 
     public void ArcherAttack()
     {
         animator.SetTrigger("ArcherAttack");
 
-        //a bit weird for here
-        Vector3 offset = new Vector3(archerAim.position.x - 100, archerAim.position.y, archerAim.position.z);
+        Vector3 offset = new Vector3(archerAim.position.x, archerAim.position.y, archerAim.position.z);
         GameObject arrow = Instantiate(this.arrow, offset, Quaternion.identity);
         arrow.transform.position = archerAim.position;
 
@@ -172,6 +165,9 @@ public class PlayerCore : MonoBehaviour
 
         if (enemyInRange)
         {
+            //random arrow shoot angle so archer won't 100% shoot enemy, considering buff to increase archer accuracy
+            archerAimDirection = Quaternion.Euler(0, 0, Random.Range(-10, 10)) * archerAimDirection;
+
             arrow.GetComponent<Arrow>().direction = archerAimDirection;
             arrow.transform.rotation = archerAim.rotation;
         }
@@ -186,11 +182,16 @@ public class PlayerCore : MonoBehaviour
     public void AssassinAttack()
     {
         animator.SetTrigger("AssassinAttack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(assassinAtkPoint.position, assassinAtkRange, enemyLayers);
+        MeleeAttack(assassinAtkPoint.position, assassinAtkRange, assassinDamage);
+    }
+
+    public void MeleeAttack(Vector2 atkPoint, float atkRange, int damage)
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(atkPoint, atkRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().TakeDamage(assassinDamage);
+            enemy.GetComponent<Enemy>().TakeDamage(damage);
         }
     }
 
