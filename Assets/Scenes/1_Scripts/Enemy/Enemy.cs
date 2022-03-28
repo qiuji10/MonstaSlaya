@@ -8,7 +8,6 @@ public class Enemy : EnemyData
     void Start()
     {
         currenthealth = maxHealth;
-        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     // Update is called once per frame

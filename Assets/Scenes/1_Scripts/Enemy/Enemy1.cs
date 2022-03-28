@@ -31,6 +31,7 @@ public class Enemy1 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         enemy = GetComponent<Enemy>();
+        enemy.target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     void Start()
@@ -77,26 +78,26 @@ public class Enemy1 : MonoBehaviour
             else
             {
                 //attack
-                Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
-                foreach (Collider2D player in hitPlayer)
-                {
-                    if (!player.isTrigger)
-                    {
-                        animator.SetTrigger("WolfAttack");
+                //Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
+                //foreach (Collider2D player in hitPlayer)
+                //{
+                //    if (!player.isTrigger)
+                //    {
+                //        animator.SetTrigger("WolfAttack");
 
-                        if (Vector2.Distance(attackPoint.position, enemy.target.position) < attackRange)
-                        {
-                            player.GetComponent<PlayerCore>().PlayerDamaged(enemy.damage);
-                        }
-                            
-                    }
+                //        if (Vector2.Distance(attackPoint.position, enemy.target.position) < attackRange)
+                //        {
+                //            player.GetComponent<PlayerCore>().PlayerDamaged(enemy.damage);
+                //        }
 
-                    if (player.isTrigger)
-                    {
-                        continue;
-                    }
-                }
+                //    }
 
+                //    if (player.isTrigger)
+                //    {
+                //        continue;
+                //    }
+                //}
+                animator.SetTrigger("WolfAttack");
                 maxRestTime = Random.Range(3, 8);
                 enemyState = EnemyState.REST;
             }
@@ -159,11 +160,11 @@ public class Enemy1 : MonoBehaviour
             movementPerSecond = new Vector2(0, 0);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null)
-            return;
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (attackPoint == null)
+    //        return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    }
+    //    Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    //}
 }
