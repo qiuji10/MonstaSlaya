@@ -12,8 +12,10 @@ public class Enemy2 : MonoBehaviour
     private float characterVelocity = 2.5f;
     public float stateTime;
     public float maxStateTime;
+    private bool warning;
 
     public Enemy enemy;
+    public GameObject warningPrefab;
     Rigidbody2D rb;
     Animator animator;
 
@@ -27,7 +29,6 @@ public class Enemy2 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         enemy = GetComponent<Enemy>();
-        enemy.target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     void Start()
@@ -37,7 +38,7 @@ public class Enemy2 : MonoBehaviour
         if (enemyState == EnemyState.REST)
         {
             latestDirectionChangeTime = 0f;
-            TimerAndDirectionRandomize();
+            enemy.TimerAndDirectionRandomize(ref directionChangeTime, ref movementDirection, ref movementPerSecond, ref characterVelocity);
         }
     }
 
@@ -47,6 +48,17 @@ public class Enemy2 : MonoBehaviour
             animator.SetBool("isWalking", true);
         else
             animator.SetBool("isWalking", false);
+
+        if (!warning)
+        {
+            if (enemyState == EnemyState.ATTACK)
+            {
+                GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
+                warning = true;
+
+                Destroy(warn, 0.4f);
+            }
+        }
     }
 
     void FixedUpdate()
@@ -54,7 +66,7 @@ public class Enemy2 : MonoBehaviour
         if (enemyState == EnemyState.ATTACK)
         {
             stateTime += Time.deltaTime;
-            if (stateTime >= 10)
+            if (stateTime >= 4)
             {
                 stateTime = 0;
                 enemyState = EnemyState.REST;
@@ -74,7 +86,7 @@ public class Enemy2 : MonoBehaviour
             {
                 //attack
                 animator.SetTrigger("TrollAttack");
-                maxStateTime = Random.Range(3, 8);
+                maxStateTime = Random.Range(5, 15);
                 enemyState = EnemyState.REST;
             }
         }
@@ -83,6 +95,9 @@ public class Enemy2 : MonoBehaviour
 
         if (enemyState == EnemyState.REST)
         {
+            if (warning)
+                warning = false;
+
             if (movementDirection.x < 0)
                 gameObject.transform.localScale = new Vector3(-1.05f, 1.05f, 0);
             else if (movementDirection.x > 0)
@@ -92,6 +107,7 @@ public class Enemy2 : MonoBehaviour
             if (stateTime >= maxStateTime)
             {
                 stateTime = 0;
+                maxStateTime = Random.Range(3, 8);
                 enemyState = EnemyState.ATTACK;
             }
 
@@ -99,40 +115,10 @@ public class Enemy2 : MonoBehaviour
             if (Time.time - latestDirectionChangeTime > directionChangeTime)
             {
                 latestDirectionChangeTime = Time.time;
-                TimerAndDirectionRandomize();
+                enemy.TimerAndDirectionRandomize(ref directionChangeTime, ref movementDirection, ref movementPerSecond, ref characterVelocity);
             }
 
             rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y* Time.deltaTime)));
         }
-    }
-
-    void TimerAndDirectionRandomize()
-    {
-        //random direction change time
-        directionChangeTime = Random.Range(1, 4);
-
-        //track player direction + random direction
-        if (transform.position.x > enemy.target.position.x)
-        {
-            if (transform.position.y > enemy.target.position.y)
-                movementDirection = new Vector2(Random.Range(-1.0f, 0.1f), Random.Range(-1.0f, 0.1f)).normalized;
-            else
-                movementDirection = new Vector2(Random.Range(-1.0f, 0.1f), Random.Range(0.1f, 1.0f)).normalized;
-        }
-        else
-        {
-            if (transform.position.y > enemy.target.position.y)
-                movementDirection = new Vector2(Random.Range(1.0f, -0.1f), Random.Range(-1.0f, 0.1f)).normalized;
-            else
-                movementDirection = new Vector2(Random.Range(1.0f, -0.1f), Random.Range(0.1f, 1.0f)).normalized;
-        }
-
-        //random counter for enemy will move or not
-        int isMoving = Random.Range(-2, 10);
-
-        if (isMoving > 0)
-            movementPerSecond = movementDirection * characterVelocity;
-        else
-            movementPerSecond = new Vector2(0, 0);
     }
 }

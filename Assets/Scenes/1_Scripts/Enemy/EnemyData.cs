@@ -12,8 +12,14 @@ public class EnemyData : MonoBehaviour
 
     public Transform target;
 
+    protected virtual void Awake()
+    {
+        target = GameObject.Find("Player").GetComponent<Transform>();
+    }
+
     public void TakeDamage(int damaged)
     {
+        Debug.Log("Enemy Hitted");
         currenthealth -= damaged;
         
         if (currenthealth <= 0)

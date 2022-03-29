@@ -110,32 +110,13 @@ public class PlayerCore : MonoBehaviour
             else
             {
                 //rotate bow but not complete
-                if ((playerState == Character.ARCHER))
+                if (playerController.movement.x != 0 && playerController.movement.y != 0)
                 {
-                    //float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
-                    //if (playerController.movement.x > 0)
-                    //{
-                    //    archerAim.eulerAngles = new Vector3(0, 0, angle);
-                    //}
-                    //else if (playerController.movement.x < 0)
-                    //{
-                    //    archerAim.eulerAngles = new Vector3(0, 0, angle - 180);
-                    //}
-                    //else if (playerController.movement.y > 0)
-                    //{
-                    //    archerAim.eulerAngles = new Vector3(0, 0, 90);
-                    //}
-                    float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
-                    if (playerController.movement.x > 0)
-                    {
-                        archerAim.transform.eulerAngles = Vector3.forward * angle;
-                    }
-                    else if (playerController.movement.x < 0)
-                    {
-                        angle += 180;
-                        archerAim.transform.eulerAngles = Vector3.forward * angle;
-                    }
+                    float angle = Mathf.Atan2(playerController.movement.y, playerController.movement.x) * Mathf.Rad2Deg;
+                    archerAim.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
                 }
+                
+                
             }
         }
     }
@@ -190,8 +171,16 @@ public class PlayerCore : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(atkPoint, atkRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("Hitting enemy");
-            enemy.GetComponent<Enemy>().TakeDamage(damage);
+            //if (enemy.gameObject.GetComponent<Enemy>() != null)
+            //    enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+
+            //if (enemy.transform.parent.GetComponent<EnemyBullet>() != null)
+            //    Destroy(enemy.transform.parent.gameObject);
+            if (enemy.GetComponent<Enemy>() != null)
+                enemy.GetComponent<Enemy>().TakeDamage(damage);
+            else
+                Destroy(enemy.transform.parent.gameObject);
+
         }
     }
 

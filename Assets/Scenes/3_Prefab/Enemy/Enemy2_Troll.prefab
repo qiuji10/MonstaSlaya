@@ -271,6 +271,7 @@ MonoBehaviour:
   stateTime: 0
   maxStateTime: 0
   enemy: {fileID: 0}
+  warningPrefab: {fileID: 7221893520199710201, guid: cf67c57bd0caa744eb858f05a9fdd0fa, type: 3}
   enemyState: 0
 --- !u!114 &2428495885366883561
 MonoBehaviour:
