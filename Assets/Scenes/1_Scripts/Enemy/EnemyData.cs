@@ -12,6 +12,9 @@ public class EnemyData : MonoBehaviour
 
     public Transform target;
 
+    public enum EnemyState { REST, ATTACK }
+    public EnemyState enemyState = EnemyState.REST;
+
     protected virtual void Awake()
     {
         target = GameObject.Find("Player").GetComponent<Transform>();

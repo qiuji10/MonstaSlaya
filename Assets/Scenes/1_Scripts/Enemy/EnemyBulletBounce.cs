@@ -13,10 +13,8 @@ public class EnemyBulletBounce : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //rb.AddForce(transform.right * speed);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!bounced)
@@ -32,7 +30,7 @@ public class EnemyBulletBounce : MonoBehaviour
             {
                 float speed = lastVelocity.magnitude;
                 Vector3 direction = Vector3.Reflect(lastVelocity.normalized, col.contacts[0].normal);
-                rb.velocity = direction * Mathf.Max(speed, 0f);
+                rb.velocity = direction * speed;
                 bounced = true;
             }
             else

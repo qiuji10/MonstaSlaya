@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : EnemyData
 {
+    GameObject warningPrefab;
+
     protected override void Awake()
     {
         currenthealth = maxHealth;
@@ -44,5 +46,27 @@ public class Enemy : EnemyData
             movementPerSecond = movementDirection * characterVelocity;
         else
             movementPerSecond = new Vector2(0, 0);
+    }
+
+    public void FlipScale(ref Vector2 movementPerSecond, ref Animator animator)
+    {
+        if (movementPerSecond != Vector2.zero)
+            animator.SetBool("isWalking", true);
+        else
+            animator.SetBool("isWalking", false);
+    }
+
+    public void AttackWarning(ref bool warning)
+    {
+        if (!warning)
+        {
+            if (enemyState == EnemyState.ATTACK)
+            {
+                GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
+                warning = true;
+
+                Destroy(warn, 0.4f);
+            }
+        }
     }
 }

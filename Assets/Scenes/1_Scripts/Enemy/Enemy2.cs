@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy2 : MonoBehaviour
 {
-    public enum EnemyState { REST, ATTACK }
-
     [SerializeField] float minDistance;
     private float latestDirectionChangeTime;
     private float directionChangeTime;
@@ -22,8 +20,6 @@ public class Enemy2 : MonoBehaviour
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
 
-    public EnemyState enemyState = EnemyState.REST;
-
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,7 +31,7 @@ public class Enemy2 : MonoBehaviour
     {
         maxStateTime = Random.Range(3, 8);
 
-        if (enemyState == EnemyState.REST)
+        if (enemy.enemyState == EnemyData.EnemyState.REST)
         {
             latestDirectionChangeTime = 0f;
             enemy.TimerAndDirectionRandomize(ref directionChangeTime, ref movementDirection, ref movementPerSecond, ref characterVelocity);
@@ -44,32 +40,30 @@ public class Enemy2 : MonoBehaviour
 
     void Update()
     {
-        if (movementPerSecond != Vector2.zero)
-            animator.SetBool("isWalking", true);
-        else
-            animator.SetBool("isWalking", false);
+        enemy.FlipScale(ref movementPerSecond, ref animator);
+        enemy.AttackWarning(ref warning);
 
-        if (!warning)
-        {
-            if (enemyState == EnemyState.ATTACK)
-            {
-                GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
-                warning = true;
+        //if (!warning)
+        //{
+        //    if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
+        //    {
+        //        GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
+        //        warning = true;
 
-                Destroy(warn, 0.4f);
-            }
-        }
+        //        Destroy(warn, 0.4f);
+        //    }
+        //}
     }
 
     void FixedUpdate()
     {
-        if (enemyState == EnemyState.ATTACK)
+        if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
         {
             stateTime += Time.deltaTime;
             if (stateTime >= 4)
             {
                 stateTime = 0;
-                enemyState = EnemyState.REST;
+                enemy.enemyState = EnemyData.EnemyState.REST;
             }
 
             if (movementDirection.x < enemy.target.position.x)
@@ -87,13 +81,13 @@ public class Enemy2 : MonoBehaviour
                 //attack
                 animator.SetTrigger("TrollAttack");
                 maxStateTime = Random.Range(5, 15);
-                enemyState = EnemyState.REST;
+                enemy.enemyState = EnemyData.EnemyState.REST;
             }
         }
         
 
 
-        if (enemyState == EnemyState.REST)
+        if (enemy.enemyState == EnemyData.EnemyState.REST)
         {
             if (warning)
                 warning = false;
@@ -108,7 +102,7 @@ public class Enemy2 : MonoBehaviour
             {
                 stateTime = 0;
                 maxStateTime = Random.Range(3, 8);
-                enemyState = EnemyState.ATTACK;
+                enemy.enemyState = EnemyData.EnemyState.ATTACK;
             }
 
             //if the changeTime was reached, calculate a new timer and movement vector
