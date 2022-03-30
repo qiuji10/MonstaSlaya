@@ -4,74 +4,38 @@ using UnityEngine;
 
 public class Enemy2 : MonoBehaviour
 {
-    [SerializeField] float minDistance;
-    private float latestDirectionChangeTime;
-    private float directionChangeTime;
-    private float characterVelocity = 2.5f;
-    public float stateTime;
-    public float maxStateTime;
-    private bool warning;
+    float maxAttackTime = 4;
+    float maxRestTime;
 
     public Enemy enemy;
-    public GameObject warningPrefab;
-    Rigidbody2D rb;
-    Animator animator;
-
-    private Vector2 movementDirection;
-    private Vector2 movementPerSecond;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         enemy = GetComponent<Enemy>();
-    }
-
-    void Start()
-    {
-        maxStateTime = Random.Range(3, 8);
+        maxRestTime = Random.Range(3, 8);
 
         if (enemy.enemyState == EnemyData.EnemyState.REST)
         {
-            latestDirectionChangeTime = 0f;
-            enemy.TimerAndDirectionRandomize(ref directionChangeTime, ref movementDirection, ref movementPerSecond, ref characterVelocity);
+            enemy.latestDirectionChangeTime = 0f;
+            enemy.TimerAndDirectionRandomize();
         }
     }
 
     void Update()
     {
-        enemy.FlipScale(ref movementPerSecond, ref animator);
-        enemy.AttackWarning(ref warning);
-
-        //if (!warning)
-        //{
-        //    if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
-        //    {
-        //        GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
-        //        warning = true;
-
-        //        Destroy(warn, 0.4f);
-        //    }
-        //}
+        enemy.FlipScale();
+        enemy.AttackWarning();
     }
 
     void FixedUpdate()
     {
         if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
         {
-            stateTime += Time.deltaTime;
-            if (stateTime >= 4)
-            {
-                stateTime = 0;
-                enemy.enemyState = EnemyData.EnemyState.REST;
-            }
+            enemy.AttackCounter(maxAttackTime);
 
-            if (movementDirection.x < enemy.target.position.x)
-                gameObject.transform.localScale = new Vector3(1.05f, 1.05f, 0);
-            else if (movementDirection.x > enemy.target.position.x)
-                gameObject.transform.localScale = new Vector3(-1.05f, 1.05f, 0);
+            enemy.FacingTarget();
 
-            if (Vector2.Distance(transform.position, enemy.target.position) > minDistance)
+            if (Vector2.Distance(transform.position, enemy.target.position) > enemy.minDistance)
             {
                 transform.position = Vector2.MoveTowards(transform.position, enemy.target.position, (enemy.speed + 2) * Time.deltaTime);
                 //rb.MovePosition(Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime));
@@ -79,40 +43,15 @@ public class Enemy2 : MonoBehaviour
             else
             {
                 //attack
-                animator.SetTrigger("TrollAttack");
-                maxStateTime = Random.Range(5, 15);
+                enemy.animator.SetTrigger("TrollAttack");
+                maxRestTime = Random.Range(5, 15);
                 enemy.enemyState = EnemyData.EnemyState.REST;
             }
         }
-        
-
 
         if (enemy.enemyState == EnemyData.EnemyState.REST)
         {
-            if (warning)
-                warning = false;
-
-            if (movementDirection.x < 0)
-                gameObject.transform.localScale = new Vector3(-1.05f, 1.05f, 0);
-            else if (movementDirection.x > 0)
-                gameObject.transform.localScale = new Vector3(1.05f, 1.05f, 0);
-
-            stateTime += Time.deltaTime;
-            if (stateTime >= maxStateTime)
-            {
-                stateTime = 0;
-                maxStateTime = Random.Range(3, 8);
-                enemy.enemyState = EnemyData.EnemyState.ATTACK;
-            }
-
-            //if the changeTime was reached, calculate a new timer and movement vector
-            if (Time.time - latestDirectionChangeTime > directionChangeTime)
-            {
-                latestDirectionChangeTime = Time.time;
-                enemy.TimerAndDirectionRandomize(ref directionChangeTime, ref movementDirection, ref movementPerSecond, ref characterVelocity);
-            }
-
-            rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y* Time.deltaTime)));
+            enemy.RestMovement(maxRestTime);
         }
     }
 }

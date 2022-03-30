@@ -212,6 +212,16 @@ MonoBehaviour:
   damage: 0
   speed: 3
   target: {fileID: 0}
+  enemyState: 0
+  minDistance: 11
+  latestDirectionChangeTime: 0
+  directionChangeTime: 0
+  characterVelocity: 2.5
+  stateTimeCounter: 0
+  warning: 0
+  warningPrefab: {fileID: 7221893520199710201, guid: cf67c57bd0caa744eb858f05a9fdd0fa, type: 3}
+  rb: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &2421470142030342188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,14 +234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5a118cbc0f4cc469631b63de292e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 11
-  stateTime: 0
-  maxStateTime: 0
   enemy: {fileID: 0}
-  warningPrefab: {fileID: 7221893520199710201, guid: cf67c57bd0caa744eb858f05a9fdd0fa, type: 3}
   enemyBullet: {fileID: 2124242251142371436, guid: 1fb8c94fccb06074fb0fa7535b54fcbb, type: 3}
   aimDirection: {fileID: 2872828751996976536}
-  enemyState: 1
 --- !u!1 &6964785790412372316
 GameObject:
   m_ObjectHideFlags: 0
