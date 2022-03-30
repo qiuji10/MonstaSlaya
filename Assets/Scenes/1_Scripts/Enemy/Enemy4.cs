@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3 : MonoBehaviour
+public class Enemy4 : MonoBehaviour
 {
     public enum EnemyState { REST, ATTACK }
 
@@ -88,18 +88,19 @@ public class Enemy3 : MonoBehaviour
                 if (!shooted)
                 {
                     Vector3 targetDirection = (enemy.target.position - aimDirection.position).normalized;
-                    float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-                    aimDirection.eulerAngles = new Vector3(0, 0, angle);
-                    GameObject bullet = Instantiate(enemyBullet, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
-                    bullet.GetComponent<EnemyBullet>().direction = targetDirection;
-                    //archerAimDirection = Quaternion.Euler(0, 0, Random.Range(-10, 10)) * archerAimDirection;
-                    //bullet.transform.rotation = aimDirection.rotation * Quaternion.Euler(0,0,90);
+                    targetDirection = Quaternion.Euler(0, 0, 50) * targetDirection;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        GameObject bullet = Instantiate(enemyBullet, aimDirection.position, Quaternion.identity);
+                        targetDirection = Quaternion.Euler(0, 0, -20) * targetDirection;
+                        bullet.GetComponent<EnemyBulletBounce>().direction = targetDirection;
+                    }
 
                     maxStateTime = Random.Range(5, 10);
                     shooted = true;
                     enemyState = EnemyState.REST;
                 }
-                
+
             }
         }
 

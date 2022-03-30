@@ -42,7 +42,6 @@ public class EnemyBullet : MonoBehaviour
                 col.gameObject.GetComponent<PlayerCore>().PlayerDamaged(2);
                 Destroy(gameObject);
             }
-            
         }
     }
 }
