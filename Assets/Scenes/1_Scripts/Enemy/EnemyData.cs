@@ -10,6 +10,13 @@ public class EnemyData : MonoBehaviour
     public int damage;
     public float speed;
 
+    public float minDistance;
+    public float latestDirectionChangeTime;
+    public float directionChangeTime;
+    public float characterVelocity = 2.5f;
+    public float stateTimeCounter;
+    public bool warning;
+
     public Transform target;
 
     public enum EnemyState { REST, ATTACK }

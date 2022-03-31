@@ -43,7 +43,7 @@ public class Enemy2 : MonoBehaviour
             else
             {
                 //attack
-                enemy.animator.SetTrigger("TrollAttack");
+                enemy.Anim.SetTrigger("TrollAttack");
                 maxRestTime = Random.Range(5, 15);
                 enemy.enemyState = EnemyData.EnemyState.REST;
             }

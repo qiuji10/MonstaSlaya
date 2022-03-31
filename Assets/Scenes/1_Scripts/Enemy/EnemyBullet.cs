@@ -6,24 +6,17 @@ public class EnemyBullet : MonoBehaviour
 {
     public float speed;
 
-    //SpriteRenderer sp;
-
     public Vector2 direction = new Vector2(1, 0);
     private Vector2 velocity;
 
     private void Awake()
     {
-        //sp = GetComponent<SpriteRenderer>();
         Destroy(gameObject, 8);
     }
 
     void Update()
     {
         velocity = direction * speed;
-        //if (!sp.isVisible)
-        //    Destroy(gameObject);
-        //gameObject.SetActive(false);
-
     }
 
     private void FixedUpdate()

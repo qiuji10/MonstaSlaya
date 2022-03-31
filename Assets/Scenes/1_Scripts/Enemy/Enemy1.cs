@@ -7,7 +7,7 @@ public class Enemy1 : MonoBehaviour
     float maxATKTime = 4;
     float maxRestTime;
 
-    public Enemy enemy;
+    Enemy enemy;
 
     void Awake()
     {
@@ -43,7 +43,7 @@ public class Enemy1 : MonoBehaviour
             else
             {
                 //attack
-                enemy.animator.SetTrigger("WolfAttack");
+                enemy.Anim.SetTrigger("WolfAttack");
                 maxRestTime = Random.Range(5, 10);
                 enemy.enemyState = EnemyData.EnemyState.REST;
             }

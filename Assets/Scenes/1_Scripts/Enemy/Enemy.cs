@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Enemy : EnemyData
 {
-    public float minDistance;
-    public float latestDirectionChangeTime;
-    public float directionChangeTime;
-    public float characterVelocity = 2.5f;
-    public float stateTimeCounter;
-    public bool warning;
-
     public GameObject warningPrefab;
-    public Rigidbody2D rb;
-    public Animator animator;
+    private Rigidbody2D rb;
+    private Animator animator;
+
+    public Rigidbody2D Rb
+    {
+        get => rb;
+        set => rb = value;
+    }
+
+    public Animator Anim
+    {
+        get => animator;
+        set => animator = value;
+    }
 
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;

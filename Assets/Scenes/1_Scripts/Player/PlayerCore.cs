@@ -10,6 +10,7 @@ public class PlayerCore : MonoBehaviour
     public float speed = 5f;
 
     public ClosestEnemy closestEnemy;
+    Enemy currentEnemy = null;
     Animator animator;
     PlayerController playerController;
 
@@ -52,7 +53,8 @@ public class PlayerCore : MonoBehaviour
     {
         if (enemyInRange)
         {
-            closestEnemy.FindClosestEnemy(ref enemyPos);
+            closestEnemy.FindClosestEnemy(ref enemyPos, ref currentEnemy);
+            currentEnemy.transform.Find("targeted_sprite").gameObject.SetActive(true);
         }
 
         if (playerController.movement.x != 0 || playerController.movement.y != 0)
