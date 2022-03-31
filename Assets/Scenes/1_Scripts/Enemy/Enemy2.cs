@@ -12,7 +12,7 @@ public class Enemy2 : MonoBehaviour
     void Awake()
     {
         enemy = GetComponent<Enemy>();
-        maxRestTime = Random.Range(3, 8);
+        maxRestTime = Random.Range(5, 15);
 
         if (enemy.enemyState == EnemyData.EnemyState.REST)
         {

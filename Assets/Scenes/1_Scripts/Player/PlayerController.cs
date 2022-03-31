@@ -5,17 +5,23 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    float hitTime = 0.5f;
+    public int combo = 0;
+    public bool knightComboTimer;
+    public float comboTimer;
+
     Rigidbody2D rb;
-    Animator animator;
     PlayerCore playerCore;
+    Transform aim;
 
     public Vector2 movement;
+    public Vector3 mousePos;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         playerCore = GetComponent<PlayerCore>();
+        aim = transform.Find("Aim");
     }
 
     void Update()
@@ -28,32 +34,69 @@ public class PlayerController : MonoBehaviour
             playerCore.SwitchCharacter();
         }
 
-        //if (Time.time >= playerCore.knightNxtAtk && playerCore.playerState == PlayerCore.Character.KNIGHT)
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 aimDir = (mousePos - transform.position).normalized;
+        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        aim.eulerAngles = new Vector3(0, 0, angle);
+
+        //if (playerCore.playerState == PlayerCore.Character.KNIGHT)
         //{
-        //    if (Input.GetKeyDown(KeyCode.J))
+        //    if (playerCore.knightAtkCD < playerCore.knightAtkRate)
+        //        playerCore.knightAtkCD += Time.deltaTime;
+
+        //    else if (playerCore.knightAtkCD >= playerCore.knightAtkRate && Input.GetMouseButtonDown(0))
         //    {
+        //        playerCore.knightAtkCD = 0;
         //        playerCore.KnightAttack();
-        //        playerCore.knightNxtAtk = Time.time + 1f / playerCore.knightAtkRate;
         //    }
         //}
-
         if (playerCore.playerState == PlayerCore.Character.KNIGHT)
         {
             if (playerCore.knightAtkCD < playerCore.knightAtkRate)
                 playerCore.knightAtkCD += Time.deltaTime;
 
-            else if (playerCore.knightAtkCD >= playerCore.knightAtkRate && Input.GetKeyDown(KeyCode.J))
+            else if (playerCore.knightAtkCD >= playerCore.knightAtkRate && Input.GetMouseButtonDown(0))
             {
-                playerCore.knightAtkCD = 0;
-                playerCore.KnightAttack();
+                if (combo == 0)
+                {
+                    combo = 1;
+                    playerCore.knightAtkCD = 0;
+                    knightComboTimer = true;
+                }
+                else if (combo == 1 && comboTimer < (playerCore.knightAtkCD + hitTime))
+                {
+                    combo = 2;
+                    playerCore.knightAtkCD = 0;
+                    comboTimer = 0;
+        
+                }
+                else if (combo == 2 && comboTimer < (playerCore.knightAtkCD + hitTime))
+                {
+                    combo = 3;
+                    playerCore.knightAtkCD = 0;
+                    knightComboTimer = false;
+                }
+                else
+                {
+                    if (combo == 3)
+                        combo = 0;
+                    comboTimer = 0;
+                }
+                playerCore.KnightAttack(combo);
+                
             }
+
+            if (knightComboTimer)
+                comboTimer += Time.deltaTime;
+            else
+                comboTimer = 0;
         }
         else if (playerCore.playerState == PlayerCore.Character.ARCHER)
         {
             if (playerCore.archerAtkCD < playerCore.archerAtkRate)
                 playerCore.archerAtkCD += Time.deltaTime;
 
-            else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetKeyDown(KeyCode.J))
+            else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetMouseButtonDown(0))
             {
                 playerCore.archerAtkCD = 0;
                 playerCore.ArcherAttack();
@@ -61,7 +104,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (playerCore.playerState == PlayerCore.Character.ASSASSIN)
         {
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetMouseButtonDown(0))
             {
                 playerCore.AssassinAttack();
             }

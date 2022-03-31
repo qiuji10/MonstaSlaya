@@ -10,14 +10,14 @@ public class PlayerCore : MonoBehaviour
     public float speed = 5f;
 
     public ClosestEnemy closestEnemy;
-    Enemy currentEnemy = null;
     Animator animator;
     PlayerController playerController;
+    SpriteRenderer sp;
 
     [Header("Knight")]
     public Transform knightAtkPoint;
     public float knightAtkRate = 0.5f;
-    public float knightAtkCD = 0f;
+    public float knightAtkCD = 0.5f;
     public int knightDamage = 1;
     public float knightAtkRange = 1.2f;
     [Space(20)]
@@ -27,7 +27,7 @@ public class PlayerCore : MonoBehaviour
     public GameObject arrow;
     public float archerAtkRate = 0.8f;
     public float archerAtkCD = 0f;
-    Vector3 archerAimDirection, facingDirection;
+    Vector3 archerAimDirection;
     [Space(20)]
 
     [Header("Assassin")]
@@ -39,56 +39,32 @@ public class PlayerCore : MonoBehaviour
     public Character playerState = Character.KNIGHT;
     public LayerMask enemyLayers;
     Vector3 enemyPos;
-    Vector3 facingRight = new Vector3(1.5f, 1.5f, 1);
-    Vector3 facingLeft = new Vector3(-1.5f, 1.5f, 1);
 
     void Awake()
     {
         animator = GetComponent<Animator>();
-        closestEnemy = GetComponent<ClosestEnemy>();
         playerController = GetComponent<PlayerController>();
+        sp = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        if (enemyInRange)
-        {
-            closestEnemy.FindClosestEnemy(ref enemyPos, ref currentEnemy);
-            currentEnemy.transform.Find("targeted_sprite").gameObject.SetActive(true);
-        }
-
         if (playerController.movement.x != 0 || playerController.movement.y != 0)
         {
             animator.SetBool("isWalking", true);
-            facingDirection = new Vector2(playerController.movement.x, playerController.movement.y);
         }
         else
         {
             animator.SetBool("isWalking", false);
         }
 
-
-        if (enemyInRange)
+        if (playerController.mousePos.x < transform.position.x)
         {
-            if (enemyPos.x < transform.position.x)
-            {
-                gameObject.transform.localScale = facingLeft;
-            }
-            else if (enemyPos.x > transform.position.x)
-            {
-                gameObject.transform.localScale = facingRight;
-            }
+            sp.flipX = true;
         }
-        else
+        else if (playerController.mousePos.x > transform.position.x)
         {
-            if (playerController.movement.x < 0)
-            {
-                gameObject.transform.localScale = facingLeft;
-            }
-            else if (playerController.movement.x > 0)
-            {
-                gameObject.transform.localScale = facingRight;
-            }
+            sp.flipX = false;
         }
 
         if (playerState == Character.ARCHER)
@@ -123,9 +99,14 @@ public class PlayerCore : MonoBehaviour
         }
     }
 
-    public void KnightAttack()
+    public void KnightAttack(int atkCombo)
     {
-        animator.SetTrigger("KnightAttack");
+        if (atkCombo == 1)
+            animator.SetTrigger("KnightAttack1");
+        else if (atkCombo == 2)
+            animator.SetTrigger("KnightAttack2");
+        else if (atkCombo == 3)
+            animator.SetTrigger("KnightAttack3");
         MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage);
     }
 
@@ -137,29 +118,8 @@ public class PlayerCore : MonoBehaviour
         GameObject arrow = Instantiate(this.arrow, offset, Quaternion.identity);
         arrow.transform.position = archerAim.position;
 
-        if (enemyPos.x < transform.position.x && enemyInRange)
-        {
-            archerAim.rotation *= Quaternion.Euler(0, 0, -270);
-        }
-        else if (enemyPos.x > transform.position.x && enemyInRange)
-        {
-            archerAim.rotation *= Quaternion.Euler(0, 0, 270);
-        }
-
-        if (enemyInRange)
-        {
-            //random arrow shoot angle so archer won't 100% shoot enemy, considering buff to increase archer accuracy
-            archerAimDirection = Quaternion.Euler(0, 0, Random.Range(-10, 10)) * archerAimDirection;
-
-            arrow.GetComponent<Arrow>().direction = archerAimDirection;
-            arrow.transform.rotation = archerAim.rotation;
-        }
-        else
-        {
-            arrow.GetComponent<Arrow>().direction = facingDirection.normalized;
-            float angle = Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg;
-            arrow.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-        }        
+        arrow.GetComponent<Arrow>().direction = archerAimDirection;
+        arrow.transform.rotation = archerAim.rotation;       
     }
 
     public void AssassinAttack()
@@ -173,16 +133,10 @@ public class PlayerCore : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(atkPoint, atkRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            //if (enemy.gameObject.GetComponent<Enemy>() != null)
-            //    enemy.gameObject.GetComponent<Enemy>().TakeDamage(damage);
-
-            //if (enemy.transform.parent.GetComponent<EnemyBullet>() != null)
-            //    Destroy(enemy.transform.parent.gameObject);
             if (enemy.GetComponent<Enemy>() != null)
                 enemy.GetComponent<Enemy>().TakeDamage(damage);
             else
                 Destroy(enemy.transform.parent.gameObject);
-
         }
     }
 
