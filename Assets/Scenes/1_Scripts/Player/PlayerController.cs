@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
     public bool knightComboTimer;
     public float comboTimer;
 
+
+    public bool isAiming;
+    [SerializeField] float maxAngle = 1, minAngle = -1;
+
     Rigidbody2D rb;
     PlayerCore playerCore;
     Transform aim;
@@ -96,10 +100,35 @@ public class PlayerController : MonoBehaviour
             if (playerCore.archerAtkCD < playerCore.archerAtkRate)
                 playerCore.archerAtkCD += Time.deltaTime;
 
-            else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetMouseButtonDown(0))
+            else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetMouseButton(0) && !isAiming)
             {
                 playerCore.archerAtkCD = 0;
                 playerCore.ArcherAttack();
+                isAiming = true;
+            }
+
+            if (isAiming)
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    int max = Mathf.CeilToInt(maxAngle * 10);
+                    int min = Mathf.FloorToInt(minAngle * 10);
+
+                    if (maxAngle <= 0 && minAngle >= 0)
+                        min = max = 0;
+                    
+                    playerCore.ArcherShoot(mousePos, max, min);
+                    maxAngle = 1;
+                    minAngle = -1;
+                    isAiming = false;
+                }
+                else if (maxAngle > 0 && minAngle < 0)
+                {
+                    maxAngle -= Time.deltaTime;
+                    minAngle += Time.deltaTime;
+                }
+                    
+                    
             }
         }
         else if (playerCore.playerState == PlayerCore.Character.ASSASSIN)

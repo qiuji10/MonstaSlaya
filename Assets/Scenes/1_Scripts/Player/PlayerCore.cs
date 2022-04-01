@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerCore : MonoBehaviour
 {
@@ -9,10 +10,10 @@ public class PlayerCore : MonoBehaviour
     public bool enemyInRange;
     public float speed = 5f;
 
-    public ClosestEnemy closestEnemy;
     Animator animator;
     PlayerController playerController;
     SpriteRenderer sp;
+    CinemachineVirtualCamera vcam;
 
     [Header("Knight")]
     public Transform knightAtkPoint;
@@ -66,37 +67,6 @@ public class PlayerCore : MonoBehaviour
         {
             sp.flipX = false;
         }
-
-        if (playerState == Character.ARCHER)
-        {
-            if (enemyInRange)
-            {
-                archerAimDirection = (enemyPos - transform.position).normalized;
-
-                float angle = Mathf.Atan2(archerAimDirection.y, archerAimDirection.x) * Mathf.Rad2Deg;
-
-                if (enemyPos.x < transform.position.x)
-                {
-                    archerAim.eulerAngles = new Vector3(0, 0, angle - 180);
-                }
-                else if (enemyPos.x > transform.position.x)
-                {
-                    archerAim.eulerAngles = new Vector3(0, 0, angle);
-                }
-            }
-
-            else
-            {
-                //rotate bow but not complete
-                if (playerController.movement.x != 0 && playerController.movement.y != 0)
-                {
-                    float angle = Mathf.Atan2(playerController.movement.y, playerController.movement.x) * Mathf.Rad2Deg;
-                    archerAim.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
-                }
-                
-                
-            }
-        }
     }
 
     public void KnightAttack(int atkCombo)
@@ -113,13 +83,25 @@ public class PlayerCore : MonoBehaviour
     public void ArcherAttack()
     {
         animator.SetTrigger("ArcherAttack");
+    }
 
+    public void ArcherShoot(Vector3 mousePosition, int max, int min)
+    {
+        animator.ResetTrigger("ArcherAttack");
+        animator.SetTrigger("ArcherShooted");
+        archerAimDirection = (mousePosition - transform.position).normalized;
+        float angle = Mathf.Atan2(archerAimDirection.y, archerAimDirection.x) * Mathf.Rad2Deg;
+        archerAim.eulerAngles = new Vector3(0, 0, angle);
+
+        //random shoot angle
+        Quaternion randAngle = Quaternion.Euler(0, 0, Random.Range(min, max));
+
+        archerAimDirection = randAngle * archerAimDirection;
         Vector3 offset = new Vector3(archerAim.position.x, archerAim.position.y, archerAim.position.z);
-        GameObject arrow = Instantiate(this.arrow, offset, Quaternion.identity);
+        GameObject arrow = Instantiate(this.arrow, offset, archerAim.rotation);
         arrow.transform.position = archerAim.position;
-
         arrow.GetComponent<Arrow>().direction = archerAimDirection;
-        arrow.transform.rotation = archerAim.rotation;       
+        arrow.transform.rotation = randAngle * archerAim.rotation;
     }
 
     public void AssassinAttack()
