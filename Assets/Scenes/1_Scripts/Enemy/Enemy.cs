@@ -31,12 +31,6 @@ public class Enemy : EnemyData
         base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TimerAndDirectionRandomize()
     {
         //random direction change time

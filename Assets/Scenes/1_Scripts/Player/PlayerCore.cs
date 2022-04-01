@@ -39,7 +39,6 @@ public class PlayerCore : MonoBehaviour
 
     public Character playerState = Character.KNIGHT;
     public LayerMask enemyLayers;
-    Vector3 enemyPos;
 
     void Awake()
     {

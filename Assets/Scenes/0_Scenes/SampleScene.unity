@@ -302,6 +302,37 @@ MonoBehaviour:
     m_FrequencyGain: 1
     m_Duration: 1
     m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!1 &118838149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 118838150}
+  m_Layer: 8
+  m_Name: assassinAttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &118838150
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118838149}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 361669230}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240268068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,6 +2564,7 @@ Transform:
   m_Children:
   - {fileID: 2039896564}
   - {fileID: 2128033345}
+  - {fileID: 118838150}
   m_Father: {fileID: 1058999840}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3235,7 +3267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 775150363}
   m_Layer: 8
-  m_Name: attackPoint
+  m_Name: knightAttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10937,13 +10969,13 @@ MonoBehaviour:
   arrow: {fileID: 3670631620690634090, guid: 77318c3b4f10d63489ab37d2a0b38372, type: 3}
   archerAtkRate: 0.8
   archerAtkCD: 0
-  assassinAtkPoint: {fileID: 361669230}
+  assassinAtkPoint: {fileID: 118838150}
   assassinDamage: 1
   assassinAtkRange: 1
   playerState: 0
   enemyLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!50 &2120308457
 Rigidbody2D:
   serializedVersion: 4
@@ -11106,10 +11138,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy1_Wolf
       objectReference: {fileID: 0}
-    - target: {fileID: 2146989784680735048, guid: f44c1fe932425cc49be29d94133ed16a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2146989784680735054, guid: f44c1fe932425cc49be29d94133ed16a, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -11166,10 +11194,6 @@ PrefabInstance:
     - target: {fileID: 2428495885366883567, guid: 0e5303805b89eb740bd717840ffb8103, type: 3}
       propertyPath: m_Name
       value: Enemy2_Troll
-      objectReference: {fileID: 0}
-    - target: {fileID: 2428495885366883567, guid: 0e5303805b89eb740bd717840ffb8103, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2428495885366883574, guid: 0e5303805b89eb740bd717840ffb8103, type: 3}
       propertyPath: m_RootOrder
@@ -11272,10 +11296,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_3_Mushroom
       objectReference: {fileID: 0}
-    - target: {fileID: 980743933339436051, guid: 484e8a4d4d0aaeb4594a245629a12a11, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 484e8a4d4d0aaeb4594a245629a12a11, type: 3}
 --- !u!1001 &7708865911086360272
@@ -11332,10 +11352,6 @@ PrefabInstance:
     - target: {fileID: 6964785789358362961, guid: 650fc9771fe9a514e82ae2ee5bf4cc8e, type: 3}
       propertyPath: m_Name
       value: Enemy4_Wizard
-      objectReference: {fileID: 0}
-    - target: {fileID: 6964785789358362961, guid: 650fc9771fe9a514e82ae2ee5bf4cc8e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 650fc9771fe9a514e82ae2ee5bf4cc8e, type: 3}
