@@ -7,7 +7,6 @@ public class PlayerCore : MonoBehaviour
 {
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
-    public bool enemyInRange;
     public float speed = 5f;
 
     Animator animator;
@@ -146,30 +145,6 @@ public class PlayerCore : MonoBehaviour
     public void PlayerDamaged(int damage)
     {
         Debug.Log("Hitting player");
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            enemyInRange = true;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            enemyInRange = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            enemyInRange = false;
-        }
     }
 
     private void OnDrawGizmosSelected()

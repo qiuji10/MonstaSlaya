@@ -29,7 +29,7 @@ public class EnemyBulletBounce : MonoBehaviour
             if (!bounced)
             {
                 float speed = lastVelocity.magnitude;
-                Vector3 direction = Vector3.Reflect(lastVelocity.normalized, col.contacts[0].normal);
+                Vector3 direction = Vector3.Reflect(lastVelocity.normalized, col.GetContact(0).normal);
                 rb.velocity = direction * speed;
                 bounced = true;
             }
