@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 980743933339436053}
   - component: {fileID: 980743933339436041}
   m_Layer: 7
-  m_Name: Enemy_3_Mushroom
+  m_Name: Enemy3_Mushroom
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

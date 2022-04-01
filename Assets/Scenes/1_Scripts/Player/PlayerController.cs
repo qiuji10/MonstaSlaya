@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.mouseScrollDelta.y > 0 || Input.mouseScrollDelta.y < 0 || Input.GetKeyDown(KeyCode.E))
         {
             playerCore.SwitchCharacter();
         }
@@ -43,17 +43,6 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         aim.eulerAngles = new Vector3(0, 0, angle);
 
-        //if (playerCore.playerState == PlayerCore.Character.KNIGHT)
-        //{
-        //    if (playerCore.knightAtkCD < playerCore.knightAtkRate)
-        //        playerCore.knightAtkCD += Time.deltaTime;
-
-        //    else if (playerCore.knightAtkCD >= playerCore.knightAtkRate && Input.GetMouseButtonDown(0))
-        //    {
-        //        playerCore.knightAtkCD = 0;
-        //        playerCore.KnightAttack();
-        //    }
-        //}
         if (playerCore.playerState == PlayerCore.Character.KNIGHT)
         {
             if (playerCore.knightAtkCD < playerCore.knightAtkRate)
