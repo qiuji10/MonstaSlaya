@@ -7,14 +7,16 @@ public class Enemy2 : MonoBehaviour
     float maxAttackTime = 4;
     float maxRestTime;
 
-    public Enemy enemy;
+    public EnemyBase enemy;
+    EnemyStates enemyStates;
 
     void Awake()
     {
-        enemy = GetComponent<Enemy>();
+        enemy = GetComponent<EnemyBase>();
+        enemyStates = GetComponent<EnemyStates>();
         maxRestTime = Random.Range(5, 15);
 
-        if (enemy.enemyState == EnemyData.EnemyState.REST)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.REST)
         {
             enemy.latestDirectionChangeTime = 0f;
             enemy.TimerAndDirectionRandomize();
@@ -23,15 +25,15 @@ public class Enemy2 : MonoBehaviour
 
     void Update()
     {
-        enemy.FlipScale();
-        enemy.AttackWarning();
+        enemy.WalkAnimation();
+        enemy.AttackWarning(enemyStates);
     }
 
     void FixedUpdate()
     {
-        if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.ATTACK)
         {
-            enemy.AttackCounter(maxAttackTime);
+            enemy.AttackCounter(maxAttackTime, enemyStates);
 
             enemy.FacingTarget();
 
@@ -45,13 +47,13 @@ public class Enemy2 : MonoBehaviour
                 //attack
                 enemy.Anim.SetTrigger("TrollAttack");
                 maxRestTime = Random.Range(5, 15);
-                enemy.enemyState = EnemyData.EnemyState.REST;
+                enemyStates.enemyState = EnemyStates.EnemyState.REST;
             }
         }
 
-        if (enemy.enemyState == EnemyData.EnemyState.REST)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.REST)
         {
-            enemy.RestMovement(maxRestTime);
+            enemy.RestMovement(maxRestTime, enemyStates);
         }
     }
 }

@@ -7,14 +7,16 @@ public class Enemy1 : MonoBehaviour
     float maxATKTime = 4;
     float maxRestTime;
 
-    Enemy enemy;
+    EnemyBase enemy;
+    EnemyStates enemyStates;
 
     void Awake()
     {
-        enemy = GetComponent<Enemy>();
+        enemy = GetComponent<EnemyBase>();
+        enemyStates = GetComponent<EnemyStates>();
         maxRestTime = Random.Range(3, 8);
 
-        if (enemy.enemyState == EnemyData.EnemyState.REST)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.REST)
         {
             enemy.latestDirectionChangeTime = 0f;
             enemy.TimerAndDirectionRandomize();
@@ -23,15 +25,15 @@ public class Enemy1 : MonoBehaviour
 
     void Update()
     {
-        enemy.FlipScale();
-        enemy.AttackWarning();
+        enemy.WalkAnimation();
+        enemy.AttackWarning(enemyStates);
     }
 
     void FixedUpdate()
     {
-        if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.ATTACK)
         {
-            enemy.AttackCounter(maxATKTime);
+            enemy.AttackCounter(maxATKTime, enemyStates);
 
             enemy.FacingTarget();
 
@@ -45,13 +47,13 @@ public class Enemy1 : MonoBehaviour
                 //attack
                 enemy.Anim.SetTrigger("WolfAttack");
                 maxRestTime = Random.Range(5, 10);
-                enemy.enemyState = EnemyData.EnemyState.REST;
+                enemyStates.enemyState = EnemyStates.EnemyState.REST;
             }
         }
         
-        if (enemy.enemyState == EnemyData.EnemyState.REST)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.REST)
         {
-            enemy.RestMovement(maxRestTime);
+            enemy.RestMovement(maxRestTime, enemyStates);
         }
     }
 }

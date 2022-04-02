@@ -8,28 +8,30 @@ public class Enemy4 : MonoBehaviour
     float maxRestTime;
     private bool shooted;
 
-    public Enemy enemy;
+    public EnemyBase enemy;
     public GameObject enemyBullet;
     public Transform aimDirection;
+    EnemyStates enemyStates;
 
     void Awake()
     {
-        enemy = GetComponent<Enemy>();
+        enemy = GetComponent<EnemyBase>();
+        enemyStates = GetComponent<EnemyStates>();
         maxRestTime = Random.Range(3, 8);
-        enemy.enemyState = EnemyData.EnemyState.ATTACK;
+        enemyStates.enemyState = EnemyStates.EnemyState.ATTACK;
     }
 
     void Update()
     {
-        enemy.FlipScale();
-        enemy.AttackWarning();
+        enemy.WalkAnimation();
+        enemy.AttackWarning(enemyStates);
     }
 
     void FixedUpdate()
     {
-        if (enemy.enemyState == EnemyData.EnemyState.ATTACK)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.ATTACK)
         {
-            enemy.AttackCounter(maxAttackTime);
+            enemy.AttackCounter(maxAttackTime, enemyStates);
 
             enemy.FacingTarget();
 
@@ -53,7 +55,7 @@ public class Enemy4 : MonoBehaviour
 
                     maxRestTime = Random.Range(5, 10);
                     shooted = true;
-                    enemy.enemyState = EnemyData.EnemyState.REST;
+                    enemyStates.enemyState = EnemyStates.EnemyState.REST;
                 }
 
             }
@@ -61,12 +63,12 @@ public class Enemy4 : MonoBehaviour
 
 
 
-        if (enemy.enemyState == EnemyData.EnemyState.REST)
+        if (enemyStates.enemyState == EnemyStates.EnemyState.REST)
         {
             if (shooted)
                 shooted = false;
 
-            enemy.RestMovement(maxRestTime);
+            enemy.RestMovement(maxRestTime, enemyStates);
         }
     }
 }

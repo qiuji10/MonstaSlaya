@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 980743933339436040}
   - component: {fileID: 980743933339436055}
   - component: {fileID: 980743933339436053}
+  - component: {fileID: 643578367065155027}
   - component: {fileID: 980743933339436041}
   m_Layer: 7
   m_Name: Enemy3_Mushroom
@@ -212,8 +213,20 @@ MonoBehaviour:
   stateTimeCounter: 0
   warning: 0
   target: {fileID: 0}
-  enemyState: 0
   warningPrefab: {fileID: 7221893520199710201, guid: cf67c57bd0caa744eb858f05a9fdd0fa, type: 3}
+--- !u!114 &643578367065155027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980743933339436051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179eab6eea105eb419bc03672de281e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyState: 0
 --- !u!114 &980743933339436041
 MonoBehaviour:
   m_ObjectHideFlags: 0

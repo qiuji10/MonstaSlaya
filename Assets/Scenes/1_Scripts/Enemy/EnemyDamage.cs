@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    Enemy enemy;
+    EnemyBase enemy;
     CircleCollider2D collider2d;
 
     private void Awake()
     {
-        enemy = GetComponentInParent<Enemy>();
+        enemy = GetComponentInParent<EnemyBase>();
         collider2d = GetComponent<CircleCollider2D>();
     }
 

@@ -30,11 +30,16 @@ public class EnemyBullet : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            if (!col.isTrigger)
-            {
-                col.gameObject.GetComponent<PlayerCore>().PlayerDamaged(2);
-                Destroy(gameObject);
-            }
+            col.gameObject.GetComponent<PlayerCore>().PlayerDamaged(2);
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
         }
     }
 }

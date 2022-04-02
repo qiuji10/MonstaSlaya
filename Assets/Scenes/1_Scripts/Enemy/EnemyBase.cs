@@ -2,8 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : EnemyData
+public class EnemyBase : EnemyData
 {
+    [Header("Movement")]
+    public float minDistance;
+    public float latestDirectionChangeTime;
+    public float directionChangeTime;
+    public float characterVelocity = 2.5f;
+    public float stateTimeCounter;
+    public bool warning;
+    [Space(20)]
+
+    public Transform target;
     public GameObject warningPrefab;
     private Rigidbody2D rb;
     private Animator animator;
@@ -23,12 +33,12 @@ public class Enemy : EnemyData
     private Vector2 movementDirection;
     private Vector2 movementPerSecond;
 
-    protected override void Awake()
+    void Awake()
     {
         currenthealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        base.Awake();
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     public void TimerAndDirectionRandomize()
@@ -36,7 +46,7 @@ public class Enemy : EnemyData
         //random direction change time
         directionChangeTime = Random.Range(1, 4);
 
-        //random direction
+        //random direction, but will near player
         if (transform.position.x > target.position.x)
         {
             if (transform.position.y > target.position.y)
@@ -61,7 +71,7 @@ public class Enemy : EnemyData
             movementPerSecond = new Vector2(0, 0);
     }
 
-    public void FlipScale()
+    public void WalkAnimation()
     {
         if (movementPerSecond != Vector2.zero)
             animator.SetBool("isWalking", true);
@@ -69,11 +79,11 @@ public class Enemy : EnemyData
             animator.SetBool("isWalking", false);
     }
 
-    public void AttackWarning()
+    public void AttackWarning(EnemyStates es)
     {
         if (!warning)
         {
-            if (enemyState == EnemyState.ATTACK)
+            if (es.enemyState == EnemyStates.EnemyState.ATTACK)
             {
                 GameObject warn = Instantiate(warningPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z), Quaternion.identity, transform);
                 warning = true;
@@ -83,7 +93,7 @@ public class Enemy : EnemyData
         }
     }
 
-    public void RestMovement(float maxRestTime)
+    public void RestMovement(float maxRestTime, EnemyStates es)
     {
         if (warning)
             warning = false;
@@ -97,7 +107,7 @@ public class Enemy : EnemyData
         if (stateTimeCounter >= maxRestTime)
         {
             stateTimeCounter = 0;
-            enemyState = EnemyState.ATTACK;
+           es.enemyState = EnemyStates.EnemyState.ATTACK;
         }
 
         //if the changeTime was reached, calculate a new movement vector
@@ -110,13 +120,33 @@ public class Enemy : EnemyData
         rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y * Time.deltaTime)));
     }
 
-    public void AttackCounter(float maxAtkTime)
+    public void RestMovement()
+    {
+        if (warning)
+            warning = false;
+
+        if (movementDirection.x < 0)
+            gameObject.transform.localScale = new Vector3(-1.05f, 1.05f, 0);
+        else if (movementDirection.x > 0)
+            gameObject.transform.localScale = new Vector3(1.05f, 1.05f, 0);
+
+        //if the changeTime was reached, calculate a new movement vector
+        if (Time.time - latestDirectionChangeTime > directionChangeTime)
+        {
+            latestDirectionChangeTime = Time.time;
+            TimerAndDirectionRandomize();
+        }
+
+        rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y * Time.deltaTime)));
+    }
+
+    public void AttackCounter(float maxAtkTime, EnemyStates es)
     {
         stateTimeCounter += Time.deltaTime;
         if (stateTimeCounter >= maxAtkTime)
         {
             stateTimeCounter = 0;
-            enemyState = EnemyState.REST;
+            es.enemyState = EnemyStates.EnemyState.REST;
         }
     }
 

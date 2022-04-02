@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Arrow : MonoBehaviour
 {
     public float speed;
 
     SpriteRenderer sp;
+    CinemachineImpulseSource impSource;
 
     public Vector2 direction = new Vector2(1, 0);
     private Vector2 velocity;
@@ -14,6 +16,7 @@ public class Arrow : MonoBehaviour
     private void Awake()
     {
         sp = GetComponent<SpriteRenderer>();
+        impSource = FindObjectOfType<CinemachineImpulseSource>();
     }
 
     void Update()
@@ -22,7 +25,6 @@ public class Arrow : MonoBehaviour
         if (!sp.isVisible)
             Destroy(gameObject);
             //gameObject.SetActive(false);
-
     }
 
     private void FixedUpdate()
@@ -37,7 +39,8 @@ public class Arrow : MonoBehaviour
         if (col.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Hitting enemy");
-            col.gameObject.GetComponentInParent<Enemy>().TakeDamage(2);
+            impSource.GenerateImpulse();
+            col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(2);
             Destroy(gameObject);
         }
     }

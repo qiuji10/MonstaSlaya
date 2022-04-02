@@ -12,7 +12,7 @@ public class PlayerCore : MonoBehaviour
     Animator animator;
     PlayerController playerController;
     SpriteRenderer sp;
-    CinemachineVirtualCamera vcam;
+    CinemachineImpulseSource impSource;
 
     [Header("Knight")]
     public Transform knightAtkPoint;
@@ -44,6 +44,7 @@ public class PlayerCore : MonoBehaviour
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
+        impSource = FindObjectOfType<CinemachineImpulseSource>();
     }
 
     void Update()
@@ -75,7 +76,7 @@ public class PlayerCore : MonoBehaviour
             animator.SetTrigger("KnightAttack2");
         else if (atkCombo == 3)
             animator.SetTrigger("KnightAttack3");
-        MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage);
+        MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage, atkCombo);
     }
 
     public void ArcherAttack()
@@ -105,16 +106,23 @@ public class PlayerCore : MonoBehaviour
     public void AssassinAttack()
     {
         animator.SetTrigger("AssassinAttack");
-        MeleeAttack(assassinAtkPoint.position, assassinAtkRange, assassinDamage);
+        MeleeAttack(assassinAtkPoint.position, assassinAtkRange, assassinDamage, 1);
     }
 
-    public void MeleeAttack(Vector2 atkPoint, float atkRange, int damage)
+    public void MeleeAttack(Vector2 atkPoint, float atkRange, int damage, int combo)
     {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(atkPoint, atkRange, enemyLayers);
         foreach (Collider2D enemy in hitEnemies)
         {
-            if (enemy.GetComponent<Enemy>() != null)
-                enemy.GetComponent<Enemy>().TakeDamage(damage);
+            if (enemy.GetComponent<EnemyBase>() != null && playerState == Character.KNIGHT && combo == 3)
+            {
+                impSource.GenerateImpulse();
+                enemy.GetComponent<EnemyBase>().TakeDamage(damage + 3);
+                continue;
+            }
+
+            if (enemy.GetComponent<EnemyBase>() != null)
+                enemy.GetComponent<EnemyBase>().TakeDamage(damage);
             else
                 Destroy(enemy.transform.parent.gameObject);
         }
