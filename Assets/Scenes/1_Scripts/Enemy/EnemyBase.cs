@@ -17,7 +17,7 @@ public class EnemyBase : EnemyData
     public GameObject warningPrefab;
     private Rigidbody2D rb;
     private Animator animator;
-
+    
     public Rigidbody2D Rb
     {
         get => rb;

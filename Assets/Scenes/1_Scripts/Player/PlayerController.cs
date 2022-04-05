@@ -115,9 +115,7 @@ public class PlayerController : MonoBehaviour
                 {
                     maxAngle -= Time.deltaTime;
                     minAngle += Time.deltaTime;
-                }
-                    
-                    
+                }      
             }
         }
         else if (playerCore.playerState == PlayerCore.Character.ASSASSIN)
