@@ -43,7 +43,7 @@ public class Boss_JUMP : Boss_BaseState
                 boss.inStateTimer = 0;
                 boss.Enemy.Anim.ResetTrigger("JumpTargeting");
                 boss.Enemy.Anim.SetTrigger("JumpEnd");
-                boss.StartCoroutine(boss.Shake());
+                //boss.StartCoroutine(boss.Shake()); //make the shake in animation key event
                 boss.SetState(boss.traceState);
             }
         }

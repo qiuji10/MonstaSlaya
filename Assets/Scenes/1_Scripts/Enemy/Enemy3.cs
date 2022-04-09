@@ -49,9 +49,6 @@ public class Enemy3 : MonoBehaviour
                     aimDirection.eulerAngles = new Vector3(0, 0, angle);
                     GameObject bullet = Instantiate(enemyBullet, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
                     bullet.GetComponent<EnemyBullet>().direction = targetDirection;
-                    //archerAimDirection = Quaternion.Euler(0, 0, Random.Range(-10, 10)) * archerAimDirection;
-                    //bullet.transform.rotation = aimDirection.rotation * Quaternion.Euler(0,0,90);
-
                     maxRestTime = Random.Range(5, 10);
                     shooted = true;
                     enemyStates.enemyState = EnemyStates.EnemyState.REST;

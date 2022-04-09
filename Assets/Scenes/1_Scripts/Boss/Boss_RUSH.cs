@@ -31,6 +31,7 @@ public class Boss_RUSH : Boss_BaseState
             {
                 boss.Enemy.Anim.ResetTrigger("RushRoll");
                 boss.Enemy.Anim.SetTrigger("RushEnd");
+                boss.inStateTimer = 0;
                 boss.SetState(boss.smashState);
             }
         }
