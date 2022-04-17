@@ -8,7 +8,8 @@ public class Boss_FSM : MonoBehaviour
     public float maxRestTime = 5f;
     public float inStateTimer;
     public float bossOriginalSpeed;
-    public bool jumpTimeOut;
+    public bool jumpTimeOut, isRage;
+    private int lastNum;
 
     Rigidbody2D rb;
     Boss_BaseState currentState;
@@ -53,9 +54,45 @@ public class Boss_FSM : MonoBehaviour
         currentState.EnterState(this);
     }
 
-    public void BossState()
+    public void BossRandomState()
     {
+        int randNum = Random.Range(0, 5);
 
+        if (randNum == lastNum)
+        {
+            randNum = Random.Range(0, 5);
+        }
+
+        switch (randNum)
+        {
+            case 0:
+                SetState(restState);
+                break;
+            case 1:
+                SetState(traceState);
+                break;
+            case 2:
+                if (isRage)
+                    SetState(jumpState);
+                else
+                    SetState(smashState);
+                break;
+            case 3:
+                SetState(rushState);
+                break;
+            case 4:
+                SetState(smashState);
+                break;
+            case 5:
+                if (isRage)
+                    SetState(throwState);
+                else
+                    SetState(rushState);
+                break;
+        }
+
+
+        lastNum = randNum;
     }
 
     public void ThrowRock()

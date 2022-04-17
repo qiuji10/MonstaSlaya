@@ -31,10 +31,10 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField]
     private float waveCounddown;
     [SerializeField]
-    private int waveNum = 1;
     public float waveIntervalTime = 5f;
     private float searchCountdown = 1f;
     private int nextWave = 0;
+    private bool isEnd;
     [SerializeField]
     private Vector2 maxSpawnPos, minSpawnPos;
 
@@ -42,7 +42,7 @@ public class WaveSpawner : MonoBehaviour
     public Wave[] waves;
 
     [Header("Game State")]
-    public SpawnState state = SpawnState.COUNTING;
+    public SpawnState state = SpawnState.NOTHING;
 
     private void Start()
     {
@@ -55,16 +55,16 @@ public class WaveSpawner : MonoBehaviour
         {
             if (!EnemyIsAlive())
             {
-                waveNum++;
-                WaveCompleted(waves[nextWave]);
+                if (isEnd)
+                {
+                    state = SpawnState.NOTHING;
+                    GetComponentInChildren<SpawnerTrigger>().SetWallStatus(false);
+                }
+                else
+                    WaveCompleted(waves[nextWave]);
             }
             else
                 return;
-        }
-
-        if (waveCounddown <= 4)
-        {
-            waves[0].name = "Wave " + waveNum.ToString();
         }
 
         if (waveCounddown <= 0)
@@ -74,8 +74,11 @@ public class WaveSpawner : MonoBehaviour
                 StartCoroutine(SpwanWave(waves[nextWave]));
             }
         }
+        else if (state == SpawnState.NOTHING)
+            return;
         else
             waveCounddown -= Time.deltaTime;
+
     }
 
     void WaveCompleted(Wave wave)
@@ -153,8 +156,17 @@ public class WaveSpawner : MonoBehaviour
                     continue;
             }
         }
-        state = SpawnState.WAITING;
 
+        if (nextWave < waves.Length - 1)
+            nextWave++;
+        else
+        {
+            waveCounddown = 5;
+            isEnd = true;
+        }
+            
+
+        state = SpawnState.WAITING;
         yield break;
     }
 

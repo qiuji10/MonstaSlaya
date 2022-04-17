@@ -14,6 +14,13 @@ public class Boss_TRACE : Boss_BaseState
         boss.Enemy.WalkAnimation();
         boss.Enemy.FacingTarget();
 
+        boss.inStateTimer += Time.deltaTime;
+        if (boss.inStateTimer > 5)
+        {
+            boss.inStateTimer = 0;
+            boss.SetState(boss.rushState);
+        }
+
         if (Vector2.Distance(boss.Enemy.transform.position, boss.Enemy.target.position) > boss.Enemy.minDistance)
         {
             boss.Enemy.transform.position = Vector2.MoveTowards(boss.Enemy.transform.position, boss.Enemy.target.position, boss.Enemy.speed * Time.deltaTime);

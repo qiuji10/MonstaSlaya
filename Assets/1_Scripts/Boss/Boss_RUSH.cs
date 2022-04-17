@@ -21,6 +21,12 @@ public class Boss_RUSH : Boss_BaseState
             boss.inStateTimer = 0;
         }
 
+        if (boss.inStateTimer > 2)
+        {
+            boss.inStateTimer = 0;
+            boss.SetState(boss.smashState);
+        }
+
         if (boss.Enemy.speed != 0)
         {            
             if (Vector2.Distance(boss.Enemy.transform.position, boss.Enemy.target.position) > boss.Enemy.minDistance)
