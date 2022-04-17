@@ -40,7 +40,7 @@ public class Arrow : MonoBehaviour
         {
             Debug.Log("Hitting enemy");
             impSource.GenerateImpulse();
-            col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(2);
+            col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(2, transform.position);
             Destroy(gameObject);
         }
 

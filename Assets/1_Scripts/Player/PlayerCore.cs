@@ -117,7 +117,7 @@ public class PlayerCore : MonoBehaviour
             if (enemy.GetComponent<EnemyBase>() != null && playerState == Character.KNIGHT && combo == 3)
             {
                 impSource.GenerateImpulse();
-                enemy.GetComponent<EnemyBase>().TakeDamage(damage + 3);
+                enemy.GetComponent<EnemyBase>().TakeDamage((damage + 3), transform.position);
                 continue;
             }
 
@@ -125,7 +125,7 @@ public class PlayerCore : MonoBehaviour
             {
                 //Vector2 dist = transform.position - enemy.gameObject.transform.position;
                 //Vector2 force = dist * 3;//knockbackForce
-                enemy.GetComponent<EnemyBase>().TakeDamage(damage);
+                enemy.GetComponent<EnemyBase>().TakeDamage(damage, transform.position);
                 //enemy.GetComponent<Rigidbody2D>().AddForce(force * Time.fixedDeltaTime, ForceMode2D.Impulse);
             }
             else

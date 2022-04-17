@@ -46,6 +46,10 @@ public class Boss_FSM : MonoBehaviour
 
     void Update()
     {
+        if (enemy.currenthealth < enemy.maxHealth/2 && !isRage)
+        {
+            SetState(rageState);
+        }
         currentState.Update(this);
     }
 
@@ -59,7 +63,7 @@ public class Boss_FSM : MonoBehaviour
     {
         int randNum = Random.Range(0, 6);
 
-        if (randNum == lastNum)
+        while (randNum == lastNum)
         {
             randNum = Random.Range(0, 6);
         }
@@ -110,7 +114,6 @@ public class Boss_FSM : MonoBehaviour
         impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = time;
         impSource.m_DefaultVelocity.x = impSource.m_DefaultVelocity.y = -0.5f;
         impSource.GenerateImpulse();
-        //yield return new WaitForSeconds(1);
         impSource.m_DefaultVelocity.x = impSource.m_DefaultVelocity.y = -0.1f;
         impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = 0.2f;
     }

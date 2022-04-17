@@ -11,13 +11,24 @@ public class EnemyData : MonoBehaviour
     public int currenthealth;
     public int damage;
     public float speed;
+    private float knockForce = 10;
 
     public GameObject damageText;
     SpriteRenderer sp;
 
-    public void TakeDamage(int damaged)
+    public void TakeDamage(int damaged, Vector3 playerPos)
     {
         Debug.Log("Enemy Hitted");
+        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
+        if (rigidbody != null)
+        {
+            Debug.Log("Rigidbody");
+            //rigidbody.isKinematic = false;
+            Vector2 diff = transform.position - playerPos;
+            diff = diff.normalized * knockForce;
+            rigidbody.AddForce(diff, ForceMode2D.Impulse);
+            StartCoroutine(Knockback(rigidbody));
+        }
         GameObject DamageText = Instantiate(damageText, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
         DamageText.GetComponent<TextMeshPro>().text = damaged.ToString();
         Destroy(DamageText, 0.3f);
@@ -26,12 +37,10 @@ public class EnemyData : MonoBehaviour
 
         if (currenthealth <= 0)
         {
-            Debug.Log("EnemyDie");
-
             if (gameObject != null)
                 Destroy(gameObject);
             else
-                Debug.LogWarning("Game object couldn't found! Error");
+                Debug.LogWarning("Couldn't found enemy gameobject!");
         }
     }
 
@@ -41,5 +50,12 @@ public class EnemyData : MonoBehaviour
         sp.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         sp.color = Color.white;
+    }
+
+    IEnumerator Knockback(Rigidbody2D rb)
+    {
+        yield return new WaitForSeconds(0.2f);
+        rb.velocity = Vector2.zero;
+        //rb.isKinematic = true;
     }
 }

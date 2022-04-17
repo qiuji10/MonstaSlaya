@@ -117,7 +117,8 @@ public class EnemyBase : EnemyData
             TimerAndDirectionRandomize();
         }
 
-        rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y * Time.deltaTime)));
+        //rb.MovePosition(new Vector2(transform.position.x + (movementPerSecond.x * Time.deltaTime), transform.position.y + (movementPerSecond.y * Time.deltaTime))); //change movement to transform.Translate() to prevent clash with knockback movement in rigidbody
+        transform.Translate(movementPerSecond * Time.deltaTime);
     }
 
     public void RestMovement()
