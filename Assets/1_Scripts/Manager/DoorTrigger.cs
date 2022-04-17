@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerTrigger : MonoBehaviour
+public class DoorTrigger : MonoBehaviour
 {
     [SerializeField] List<GameObject> walls = new List<GameObject>();
+    public bool doorTriggerd;
 
     public void SetWallStatus(bool status)
     {
@@ -18,8 +19,9 @@ public class SpawnerTrigger : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            SetWallStatus(true);
-            GetComponentInParent<WaveSpawner>().state = WaveSpawner.SpawnState.WAITING;
+            if (!doorTriggerd)
+                SetWallStatus(true);
+            doorTriggerd = true;
         }
     }
 }

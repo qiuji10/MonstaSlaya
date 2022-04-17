@@ -28,6 +28,7 @@ public class Boss_FSM : MonoBehaviour
     public readonly Boss_RUSH rushState = new Boss_RUSH();
     public readonly Boss_SMASH smashState = new Boss_SMASH();
     public readonly Boss_THROW throwState = new Boss_THROW();
+    public readonly Boss_RAGE rageState = new Boss_RAGE();
 
     void Awake()
     {
@@ -40,7 +41,7 @@ public class Boss_FSM : MonoBehaviour
 
     void Start()
     {
-        SetState(rushState);
+        SetState(restState);
     }
 
     void Update()
@@ -56,11 +57,11 @@ public class Boss_FSM : MonoBehaviour
 
     public void BossRandomState()
     {
-        int randNum = Random.Range(0, 5);
+        int randNum = Random.Range(0, 6);
 
         if (randNum == lastNum)
         {
-            randNum = Random.Range(0, 5);
+            randNum = Random.Range(0, 6);
         }
 
         switch (randNum)
@@ -104,11 +105,13 @@ public class Boss_FSM : MonoBehaviour
         bullet.GetComponent<EnemyBullet>().direction = targetDirection;
     }
 
-    public IEnumerator Shake()
+    public void Shake(float time)
     {
-        impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = 1;
+        impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = time;
+        impSource.m_DefaultVelocity.x = impSource.m_DefaultVelocity.y = -0.5f;
         impSource.GenerateImpulse();
-        yield return new WaitForSeconds(1);
+        //yield return new WaitForSeconds(1);
+        impSource.m_DefaultVelocity.x = impSource.m_DefaultVelocity.y = -0.1f;
         impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = 0.2f;
     }
 }

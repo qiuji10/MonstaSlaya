@@ -43,5 +43,10 @@ public class Arrow : MonoBehaviour
             col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(2);
             Destroy(gameObject);
         }
+
+        if (col.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

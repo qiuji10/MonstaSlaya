@@ -40,9 +40,15 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Enemy Initialization")]
     public Wave[] waves;
+    DoorTrigger dt;
 
     [Header("Game State")]
     public SpawnState state = SpawnState.NOTHING;
+
+    private void Awake()
+    {
+        dt = GetComponentInChildren<DoorTrigger>();
+    }
 
     private void Start()
     {
@@ -51,6 +57,11 @@ public class WaveSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (state == SpawnState.NOTHING && dt.doorTriggerd && !isEnd)
+        {
+            state = SpawnState.WAITING;
+        }
+
         if (state == SpawnState.WAITING)
         {
             if (!EnemyIsAlive())
@@ -58,7 +69,7 @@ public class WaveSpawner : MonoBehaviour
                 if (isEnd)
                 {
                     state = SpawnState.NOTHING;
-                    GetComponentInChildren<SpawnerTrigger>().SetWallStatus(false);
+                    GetComponentInChildren<DoorTrigger>().SetWallStatus(false);
                 }
                 else
                     WaveCompleted(waves[nextWave]);
@@ -85,8 +96,6 @@ public class WaveSpawner : MonoBehaviour
     {
         state = SpawnState.COUNTING;
         waveCounddown = waveIntervalTime;
-
-        //open door
     }
 
     bool EnemyIsAlive()
@@ -174,5 +183,18 @@ public class WaveSpawner : MonoBehaviour
     {
         Vector3 pos = new Vector3(Random.Range(minSpawnPos.x, maxSpawnPos.x), Random.Range(minSpawnPos.y,maxSpawnPos.y));
         Transform enemy = Instantiate(_enemy, pos, transform.rotation);
+        List<Collider2D> collideResult = new List<Collider2D>();
+        enemy.GetComponent<BoxCollider2D>().OverlapCollider(new ContactFilter2D().NoFilter(), collideResult);
+        foreach (Collider2D sceneObject in collideResult)
+        {
+            if (sceneObject.gameObject.CompareTag("Wall"))
+            {
+                int rand = Random.Range(0, 2);
+                if (rand == 0)
+                    enemy.transform.position = new Vector3(minSpawnPos.x, minSpawnPos.y);
+                else
+                    enemy.transform.position = new Vector3(maxSpawnPos.x, maxSpawnPos.y);
+            }
+        }
     }
 }

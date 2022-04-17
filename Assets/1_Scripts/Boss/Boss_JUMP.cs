@@ -16,7 +16,7 @@ public class Boss_JUMP : Boss_BaseState
         boss.inStateTimer += Time.deltaTime;
         if (boss.inStateTimer >= 0.6f && boss.Enemy.speed == 0)
         {
-            boss.Enemy.speed = boss.bossOriginalSpeed;
+            boss.Enemy.speed = boss.bossOriginalSpeed * 2;
             boss.inStateTimer = 0;
         }
 
@@ -27,6 +27,7 @@ public class Boss_JUMP : Boss_BaseState
 
             if (boss.inStateTimer >= 3)
             {
+                boss.Enemy.speed /= 2;
                 boss.jumpTimeOut = true;
                 boss.inStateTimer = 0;
             }
@@ -44,7 +45,7 @@ public class Boss_JUMP : Boss_BaseState
                 boss.Enemy.Anim.ResetTrigger("JumpTargeting");
                 boss.Enemy.Anim.SetTrigger("JumpEnd");
                 //boss.StartCoroutine(boss.Shake()); //alr make the shake in animation key event
-                boss.SetState(boss.traceState);
+                boss.SetState(boss.restState);
             }
         }
     }
