@@ -32,6 +32,7 @@ public class PlayerCore : MonoBehaviour
     [Header("Archer")]
     public Transform archerAim;
     public GameObject arrow, archerAOE, archerSkillCAM;
+    public CinemachineVirtualCamera vcam1;
     public bool archerSkill;
     public float archerSkillTimer;
     public float archerAtkRate = 0.8f;
@@ -59,6 +60,7 @@ public class PlayerCore : MonoBehaviour
         sp = GetComponent<SpriteRenderer>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         paralyzedSymbol = transform.Find("Paralyzed").gameObject;
+        vcam1 = transform.Find("ArcherSkill").GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
     void Update()

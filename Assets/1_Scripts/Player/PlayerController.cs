@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerCore.playerState == PlayerCore.Character.ARCHER)
         {
-            if (Input.GetMouseButton(1) && !playerCore.archerSkill)
+            if (Input.GetMouseButtonDown(1) && !playerCore.archerSkill)
             {
                 if (!playerCore.archerSkillCAM.activeInHierarchy)
                     playerCore.archerSkillCAM.SetActive(true);
@@ -176,14 +176,14 @@ public class PlayerController : MonoBehaviour
             else if (Input.GetMouseButtonUp(1) && !playerCore.archerSkill)
             {
                 playerCore.archerSkill = true;
-                GameObject AOE = Instantiate(playerCore.archerAOE, new Vector3(playerCore.archerSkillCAM.transform.position.x, playerCore.archerSkillCAM.transform.position.y, 0), Quaternion.identity);
+                GameObject AOE = Instantiate(playerCore.archerAOE, new Vector3(playerCore.archerSkillCAM.transform.position.x, playerCore.archerSkillCAM.transform.position.y, -1), Quaternion.identity);
                 Destroy(AOE, 2);
                 playerCore.archerSkillCAM.SetActive(false);
                 playerCore.archerSkillCAM.transform.position = transform.position;
             }
         }
 
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.F))
+        if (Input.GetMouseButtonDown(1))
         {
             if (playerCore.playerState == PlayerCore.Character.KNIGHT && !playerCore.knightSkill)
             {
