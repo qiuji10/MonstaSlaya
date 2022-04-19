@@ -29,7 +29,7 @@ public class Boss_RUSH : Boss_BaseState
 
         if (boss.Enemy.speed != 0)
         {            
-            if (Vector2.Distance(boss.Enemy.transform.position, boss.Enemy.target.position) > boss.Enemy.minDistance)
+            if (Vector2.Distance(boss.Enemy.transform.position, boss.Enemy.target.position ) > boss.Enemy.minDistance)
             {
                 boss.Enemy.transform.position = Vector2.MoveTowards(boss.Enemy.transform.position, boss.Enemy.target.position, boss.Enemy.speed * 2 * Time.deltaTime);
             }

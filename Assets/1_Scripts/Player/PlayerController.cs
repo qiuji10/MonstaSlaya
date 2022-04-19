@@ -30,19 +30,32 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-
-        if (Input.mouseScrollDelta.y > 0 || Input.mouseScrollDelta.y < 0 || Input.GetKeyDown(KeyCode.E))
+        if (!playerCore.isParalyzed)
         {
-            playerCore.SwitchCharacter();
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+
+            if (Input.mouseScrollDelta.y > 0 || Input.mouseScrollDelta.y < 0 || Input.GetKeyDown(KeyCode.E))
+            {
+                playerCore.SwitchCharacter();
+            }
+
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 aimDir = (mousePos - transform.position).normalized;
+            float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+            aim.eulerAngles = new Vector3(0, 0, angle);
+
+            Attack();
         }
+    }
 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 aimDir = (mousePos - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
-        aim.eulerAngles = new Vector3(0, 0, angle);
+    void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
+    }
 
+    public void Attack()
+    {
         if (playerCore.playerState == PlayerCore.Character.KNIGHT)
         {
             if (playerCore.knightAtkCD < playerCore.knightAtkRate)
@@ -85,8 +98,8 @@ public class PlayerController : MonoBehaviour
                         combo = 0;
                     isKAttack = false;
                 }
-                
-                
+
+
             }
 
             if (knightComboTimer)
@@ -115,7 +128,7 @@ public class PlayerController : MonoBehaviour
 
                     if (maxAngle <= 0 && minAngle >= 0)
                         min = max = 0;
-                    
+
                     playerCore.ArcherShoot(mousePos, max, min);
                     maxAngle = 1;
                     minAngle = -1;
@@ -125,7 +138,7 @@ public class PlayerController : MonoBehaviour
                 {
                     maxAngle -= Time.deltaTime;
                     minAngle += Time.deltaTime;
-                }      
+                }
             }
         }
         else if (playerCore.playerState == PlayerCore.Character.ASSASSIN)
@@ -135,10 +148,5 @@ public class PlayerController : MonoBehaviour
                 playerCore.AssassinAttack();
             }
         }
-    }
-
-    void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
     }
 }

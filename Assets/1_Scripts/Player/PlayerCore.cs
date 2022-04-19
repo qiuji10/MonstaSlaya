@@ -8,6 +8,8 @@ public class PlayerCore : MonoBehaviour
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
     public float speed = 5f;
+    public bool isParalyzed;
+    private float paralyzedTimer;
 
     Animator animator;
     PlayerController playerController;
@@ -65,6 +67,17 @@ public class PlayerCore : MonoBehaviour
         else if (playerController.mousePos.x > transform.position.x)
         {
             sp.flipX = false;
+        }
+
+        if (isParalyzed)
+        {
+            paralyzedTimer += Time.deltaTime;
+
+            if (paralyzedTimer > 5)
+            {
+                paralyzedTimer = 0;
+                isParalyzed = false;
+            }
         }
     }
 
@@ -158,6 +171,13 @@ public class PlayerCore : MonoBehaviour
     public void PlayerDamaged(int damage)
     {
         //Debug.Log("Hitting player");
+    }
+
+    public IEnumerator Paralyzed()
+    {
+        playerController.enabled = false;
+        yield return new WaitForSeconds(5);
+        playerController.enabled = true;
     }
 
     private void OnDrawGizmosSelected()

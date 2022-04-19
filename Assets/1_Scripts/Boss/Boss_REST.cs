@@ -23,7 +23,7 @@ public class Boss_REST : Boss_BaseState
         {
             boss.maxRestTime = originRestTime;
             boss.Enemy.characterVelocity = 2.5f;
-            boss.SetState(boss.jumpState);
+            boss.BossRandomState();
         }
     }
 }

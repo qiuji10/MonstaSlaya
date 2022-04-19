@@ -62,42 +62,31 @@ public class Boss_FSM : MonoBehaviour
 
     public void BossRandomState()
     {
-        int randNum = Random.Range(0, 6);
+        int randNum = Random.Range(0, 5);
 
         while (randNum == lastNum)
         {
-            randNum = Random.Range(0, 6);
+            randNum = Random.Range(0, 5);
         }
 
         switch (randNum)
         {
             case 0:
-                SetState(restState);
-                break;
-            case 1:
                 SetState(traceState);
                 break;
-            case 2:
-                if (isRage)
-                    SetState(jumpState);
-                else
-                    SetState(smashState);
-                break;
-            case 3:
-                SetState(rushState);
-                break;
-            case 4:
+            case 1:
                 SetState(smashState);
                 break;
-            case 5:
-                if (isRage)
-                    SetState(throwState);
-                else
-                    SetState(rushState);
+            case 2:
+                SetState(rushState);
+                break;
+            case 3:
+                SetState(jumpState);
+                break;
+            case 4:
+                SetState(throwState);
                 break;
         }
-
-
         lastNum = randNum;
     }
 
@@ -107,7 +96,7 @@ public class Boss_FSM : MonoBehaviour
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         aimDirection.eulerAngles = new Vector3(0, 0, angle);
         GameObject bullet = Instantiate(RockPrefab, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
-        bullet.GetComponent<EnemyBullet>().direction = targetDirection;
+        bullet.GetComponent<Boss_Rock>().direction = targetDirection;
     }
 
     public void Shake(float time)

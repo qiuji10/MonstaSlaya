@@ -39,7 +39,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6390237634796498877}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -58,7 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3185039467213552161}
   - component: {fileID: 2995035534934907691}
-  - component: {fileID: 629836886454305004}
+  - component: {fileID: 6720681649071284379}
   - component: {fileID: 8570800099111099730}
   - component: {fileID: 2870573098916965899}
   - component: {fileID: 8570800099111099729}
@@ -137,7 +137,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &629836886454305004
+--- !u!114 &6720681649071284379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,10 +146,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8570800099111099728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a51b7d7389d225428827661d17a3b88, type: 3}
+  m_Script: {fileID: 11500000, guid: 68f09b4b4a95bec468fcab2432f48205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 20
   direction: {x: 1, y: 0}
 --- !u!58 &8570800099111099730
 CircleCollider2D:

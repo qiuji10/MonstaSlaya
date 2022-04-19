@@ -18,7 +18,7 @@ public class Boss_TRACE : Boss_BaseState
         if (boss.inStateTimer > 5)
         {
             boss.inStateTimer = 0;
-            boss.SetState(boss.rushState);
+            boss.BossRandomState();
         }
 
         if (Vector2.Distance(boss.Enemy.transform.position, boss.Enemy.target.position) > boss.Enemy.minDistance)
@@ -28,7 +28,7 @@ public class Boss_TRACE : Boss_BaseState
         }
         else
         {
-            boss.SetState(boss.rushState);
+            boss.BossRandomState();
         }
     }
 }
