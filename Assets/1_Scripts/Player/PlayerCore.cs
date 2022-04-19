@@ -157,7 +157,7 @@ public class PlayerCore : MonoBehaviour
 
     public void PlayerDamaged(int damage)
     {
-        Debug.Log("Hitting player");
+        //Debug.Log("Hitting player");
     }
 
     private void OnDrawGizmosSelected()

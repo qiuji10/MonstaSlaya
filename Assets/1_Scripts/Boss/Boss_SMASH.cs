@@ -6,12 +6,30 @@ public class Boss_SMASH : Boss_BaseState
 {
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Smash state");
+        boss.Enemy.Anim.ResetTrigger("Smash");
         boss.Enemy.Anim.SetTrigger("Smash");
+
     }
 
     public override void Update(Boss_FSM boss)
     {
-        boss.SetState(boss.restState);
+        boss.inStateTimer += Time.deltaTime;
+
+
+        if (boss.inStateTimer >= 1)
+        {
+            boss.inStateTimer = 0;
+            if (boss.smashNum > 0)
+            {
+                boss.smashNum--;
+                boss.SetState(boss.smashState);
+            }
+            else
+            {
+                boss.smashNum = 3;
+                boss.SetState(boss.restState);
+            }
+            
+        }
     }
 }

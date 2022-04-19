@@ -9,6 +9,7 @@ public class Boss_FSM : MonoBehaviour
     public float inStateTimer;
     public float bossOriginalSpeed;
     public bool jumpTimeOut, isRage;
+    public int smashNum = 3;
     private int lastNum;
 
     Rigidbody2D rb;
@@ -41,7 +42,7 @@ public class Boss_FSM : MonoBehaviour
 
     void Start()
     {
-        SetState(restState);
+        SetState(smashState);
     }
 
     void Update()
