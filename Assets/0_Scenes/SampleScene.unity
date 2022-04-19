@@ -59731,6 +59731,7 @@ MonoBehaviour:
   smashNum: 3
   impSource: {fileID: 0}
   RockPrefab: {fileID: 8570800099111099728, guid: cc218e12c1405d74f9a0a37bfe0df4ef, type: 3}
+  enemyBullet: {fileID: 2124242251142371436, guid: 1fb8c94fccb06074fb0fa7535b54fcbb, type: 3}
 --- !u!50 &2047373910
 Rigidbody2D:
   serializedVersion: 4
@@ -60207,6 +60208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  isParalyzed: 0
   knightAtkPoint: {fileID: 775150363}
   knightAtkRate: 0.5
   knightAtkCD: 0.5

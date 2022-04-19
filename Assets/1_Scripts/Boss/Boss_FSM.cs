@@ -17,7 +17,7 @@ public class Boss_FSM : MonoBehaviour
     EnemyBase enemy;
     Transform aimDirection;
     public CinemachineImpulseSource impSource;
-    public GameObject RockPrefab;
+    public GameObject RockPrefab, enemyBullet;
 
     public Rigidbody2D Rb { get { return rb; } }
     public EnemyBase Enemy { get { return enemy; } } 
@@ -97,6 +97,18 @@ public class Boss_FSM : MonoBehaviour
         aimDirection.eulerAngles = new Vector3(0, 0, angle);
         GameObject bullet = Instantiate(RockPrefab, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
         bullet.GetComponent<Boss_Rock>().direction = targetDirection;
+    }
+
+    public void BulletCircle(int bulletNum)
+    {
+        Vector3 targetDirection = (enemy.target.position - aimDirection.position).normalized;
+        targetDirection = Quaternion.Euler(0, 0, 50) * targetDirection;
+        for (int i = 0; i < bulletNum; i++)
+        {
+            GameObject bullet = Instantiate(enemyBullet, aimDirection.position, Quaternion.identity);
+            targetDirection = Quaternion.Euler(0, 0, -20) * targetDirection;
+            bullet.GetComponent<EnemyBulletBounce>().direction = targetDirection;
+        }
     }
 
     public void Shake(float time)

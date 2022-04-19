@@ -9,6 +9,10 @@ public class Boss_SMASH : Boss_BaseState
         boss.Enemy.Anim.ResetTrigger("Smash");
         boss.Enemy.Anim.SetTrigger("Smash");
 
+        if (boss.isRage)
+            boss.BulletCircle(100);
+        else
+            boss.BulletCircle(4);
     }
 
     public override void Update(Boss_FSM boss)
