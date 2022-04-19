@@ -43,3 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: DmgText
+    uniqueID: 3265308145
+    locked: 0
