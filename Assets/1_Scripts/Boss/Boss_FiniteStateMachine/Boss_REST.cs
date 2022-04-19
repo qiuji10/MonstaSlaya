@@ -8,7 +8,6 @@ public class Boss_REST : Boss_BaseState
 
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Rest state");
         originRestTime = boss.maxRestTime;
         boss.Enemy.characterVelocity = 10;
     }

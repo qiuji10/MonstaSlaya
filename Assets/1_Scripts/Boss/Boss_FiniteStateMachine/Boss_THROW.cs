@@ -6,7 +6,6 @@ public class Boss_THROW : Boss_BaseState
 {
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Rush state");
         boss.Enemy.Anim.SetTrigger("ThrowStart");
         boss.Enemy.speed = 0;
     }

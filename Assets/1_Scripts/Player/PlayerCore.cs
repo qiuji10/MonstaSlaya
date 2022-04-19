@@ -7,7 +7,7 @@ public class PlayerCore : MonoBehaviour
 {
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
-    public float speed = 5f;
+    public float speed = 10f;
     public bool isParalyzed;
     private float paralyzedTimer;
 
@@ -15,6 +15,7 @@ public class PlayerCore : MonoBehaviour
     PlayerController playerController;
     SpriteRenderer sp;
     CinemachineImpulseSource impSource;
+    GameObject paralyzedSymbol;
 
     [Header("Knight")]
     public Transform knightAtkPoint;
@@ -47,6 +48,7 @@ public class PlayerCore : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
+        paralyzedSymbol = transform.Find("Paralyzed").gameObject;
     }
 
     void Update()
@@ -71,11 +73,15 @@ public class PlayerCore : MonoBehaviour
 
         if (isParalyzed)
         {
+            speed = 0;
+            paralyzedSymbol.SetActive(true);
             paralyzedTimer += Time.deltaTime;
 
             if (paralyzedTimer > 5)
             {
                 paralyzedTimer = 0;
+                paralyzedSymbol.SetActive(false);
+                speed = 10;
                 isParalyzed = false;
             }
         }
@@ -83,7 +89,7 @@ public class PlayerCore : MonoBehaviour
 
     public void KnightAttack(int atkCombo)
     {
-        if (atkCombo == 1)
+        if (atkCombo == 1 || atkCombo == 0)
             animator.SetTrigger("KnightAttack1");
         else if (atkCombo == 2)
             animator.SetTrigger("KnightAttack2");
@@ -97,7 +103,7 @@ public class PlayerCore : MonoBehaviour
         animator.SetTrigger("ArcherAttack");
     }
 
-    public void ArcherShoot(Vector3 mousePosition, int max, int min)
+    public void ArcherShoot(Vector3 mousePosition, int max, int min, int damage)
     {
         animator.ResetTrigger("ArcherAttack");
         animator.SetTrigger("ArcherShooted");
@@ -112,6 +118,7 @@ public class PlayerCore : MonoBehaviour
         Vector3 offset = new Vector3(archerAim.position.x, archerAim.position.y, archerAim.position.z);
         GameObject arrow = Instantiate(this.arrow, offset, archerAim.rotation);
         arrow.transform.position = archerAim.position;
+        arrow.GetComponent<Arrow>().dmg = damage;
         arrow.GetComponent<Arrow>().direction = archerAimDirection;
         arrow.transform.rotation = randAngle * archerAim.rotation;
     }
@@ -143,6 +150,11 @@ public class PlayerCore : MonoBehaviour
             }
             else
                 Destroy(enemy.transform.parent.gameObject);
+
+            if (enemy.GetComponent<Boss_FSM>() != null)
+            {
+                enemy.GetComponent<Boss_FSM>().healthBar.BossHealthChange(damage);
+            }
         }
     }
 
@@ -170,7 +182,7 @@ public class PlayerCore : MonoBehaviour
 
     public void PlayerDamaged(int damage)
     {
-        //Debug.Log("Hitting player");
+        Debug.Log("Hitting player");
     }
 
     public IEnumerator Paralyzed()

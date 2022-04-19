@@ -5,19 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Knight")]
     float hitTime = 0.5f;
     public int combo = 0;
     public bool knightComboTimer, isKAttack;
     public float comboTimer;
+    [Space(20)]
 
-
+    [Header("Archer")]
     public bool isAiming;
+    private int archerDamage;
     [SerializeField] float maxAngle = 1, minAngle = -1;
+    
 
     Rigidbody2D rb;
     PlayerCore playerCore;
     Transform aim;
 
+    [Space(20)]
     public Vector2 movement;
     public Vector3 mousePos;
 
@@ -89,10 +94,16 @@ public class PlayerController : MonoBehaviour
                     //if (combo == 3)
                     //    combo = 0;
                     comboTimer = 0;
+
+                    combo = 0;
+                    playerCore.knightAtkCD = 0;
+                    isKAttack = true;
                 }
 
                 if (isKAttack)
                 {
+                    if (combo == 0)
+                        combo = 1;
                     playerCore.KnightAttack(combo);
                     if (combo == 3)
                         combo = 0;
@@ -128,8 +139,13 @@ public class PlayerController : MonoBehaviour
 
                     if (maxAngle <= 0 && minAngle >= 0)
                         min = max = 0;
+                    
+                    if (maxAngle <= 0.2f && minAngle >= -0.2f)
+                        archerDamage = 8;
+                    else
+                        archerDamage = 4;
 
-                    playerCore.ArcherShoot(mousePos, max, min);
+                    playerCore.ArcherShoot(mousePos, max, min, archerDamage);
                     maxAngle = 1;
                     minAngle = -1;
                     isAiming = false;

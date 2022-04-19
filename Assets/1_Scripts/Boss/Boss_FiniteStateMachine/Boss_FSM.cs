@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
 
 public class Boss_FSM : MonoBehaviour
@@ -16,6 +17,8 @@ public class Boss_FSM : MonoBehaviour
     Boss_BaseState currentState;
     EnemyBase enemy;
     Transform aimDirection;
+    Transform aimDirection2;
+    public Boss_HealthSlider healthBar;
     public CinemachineImpulseSource impSource;
     public GameObject RockPrefab, enemyBullet;
 
@@ -38,6 +41,8 @@ public class Boss_FSM : MonoBehaviour
         bossOriginalSpeed = Enemy.speed;
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         aimDirection = transform.Find("Aimer").transform;
+        aimDirection2 = transform.Find("Aimer2").transform;
+        healthBar.GetComponent<Slider>().maxValue = enemy.maxHealth;
     }
 
     void Start()
@@ -49,6 +54,8 @@ public class Boss_FSM : MonoBehaviour
     {
         if (enemy.currenthealth < enemy.maxHealth/2 && !isRage)
         {
+            Enemy.speed = bossOriginalSpeed = (bossOriginalSpeed * 1.5f);
+            enemy.damage += 2;
             SetState(rageState);
         }
         currentState.Update(this);
@@ -93,19 +100,32 @@ public class Boss_FSM : MonoBehaviour
     public void ThrowRock()
     {
         Vector3 targetDirection = (enemy.target.position - aimDirection.position).normalized;
-        float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-        aimDirection.eulerAngles = new Vector3(0, 0, angle);
-        GameObject bullet = Instantiate(RockPrefab, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
-        bullet.GetComponent<Boss_Rock>().direction = targetDirection;
+        if (!isRage)
+        {
+            float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+            aimDirection.eulerAngles = new Vector3(0, 0, angle);
+            GameObject bullet = Instantiate(RockPrefab, aimDirection.position, aimDirection.rotation * Quaternion.Euler(0, 0, 90));
+            bullet.GetComponent<Boss_Rock>().direction = targetDirection;
+        }
+        else
+        {
+            targetDirection = Quaternion.Euler(0, 0, 50) * targetDirection;
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject bullet = Instantiate(RockPrefab, aimDirection.position, Quaternion.identity);
+                targetDirection = Quaternion.Euler(0, 0, -20) * targetDirection;
+                bullet.GetComponent<Boss_Rock>().direction = targetDirection;
+            }
+        }
     }
 
     public void BulletCircle(int bulletNum)
     {
-        Vector3 targetDirection = (enemy.target.position - aimDirection.position).normalized;
+        Vector3 targetDirection = (enemy.target.position - aimDirection2.position).normalized;
         targetDirection = Quaternion.Euler(0, 0, 50) * targetDirection;
         for (int i = 0; i < bulletNum; i++)
         {
-            GameObject bullet = Instantiate(enemyBullet, aimDirection.position, Quaternion.identity);
+            GameObject bullet = Instantiate(enemyBullet, aimDirection2.position, Quaternion.identity);
             targetDirection = Quaternion.Euler(0, 0, -20) * targetDirection;
             bullet.GetComponent<EnemyBulletBounce>().direction = targetDirection;
         }

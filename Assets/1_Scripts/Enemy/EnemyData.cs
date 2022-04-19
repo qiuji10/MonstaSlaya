@@ -23,7 +23,6 @@ public class EnemyData : MonoBehaviour
         if (rigidbody != null)
         {
             Debug.Log("Rigidbody");
-            //rigidbody.isKinematic = false;
             Vector2 diff = transform.position - playerPos;
             diff = diff.normalized * knockForce;
             rigidbody.AddForce(diff, ForceMode2D.Impulse);
@@ -56,6 +55,5 @@ public class EnemyData : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         rb.velocity = Vector2.zero;
-        //rb.isKinematic = true;
     }
 }

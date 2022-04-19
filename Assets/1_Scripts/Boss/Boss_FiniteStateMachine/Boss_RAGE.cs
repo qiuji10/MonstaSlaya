@@ -6,7 +6,6 @@ public class Boss_RAGE : Boss_BaseState
 {
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Rage state");
         boss.Enemy.speed = 0;
         boss.Enemy.Anim.SetTrigger("RageTrigger");
         boss.isRage = true;

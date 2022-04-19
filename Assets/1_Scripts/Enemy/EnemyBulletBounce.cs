@@ -10,9 +10,10 @@ public class EnemyBulletBounce : MonoBehaviour
     public Vector2 direction;
     Vector3 lastVelocity;
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        Destroy(gameObject, 8);
     }
 
     void Update()

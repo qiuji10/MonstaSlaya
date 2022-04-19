@@ -6,7 +6,6 @@ public class Boss_TRACE : Boss_BaseState
 {
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Trace state");
     }
 
     public override void Update(Boss_FSM boss)

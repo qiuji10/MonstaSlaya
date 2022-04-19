@@ -6,7 +6,6 @@ public class Boss_JUMP : Boss_BaseState
 {
     public override void EnterState(Boss_FSM boss)
     {
-        Debug.Log("Jump state");
         boss.Enemy.speed = 0;
         boss.Enemy.Anim.SetTrigger("JumpStart");
     }
