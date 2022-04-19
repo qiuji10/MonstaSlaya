@@ -43,6 +43,11 @@ public class Arrow : MonoBehaviour
             impSource.GenerateImpulse();
             col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(dmg, transform.position);
             Destroy(gameObject);
+
+            if (col.gameObject.GetComponent<Boss_FSM>() != null)
+            {
+                col.gameObject.GetComponent<Boss_FSM>().healthBar.BossHealthChange(dmg);
+            }
         }
 
         if (col.gameObject.CompareTag("Wall"))

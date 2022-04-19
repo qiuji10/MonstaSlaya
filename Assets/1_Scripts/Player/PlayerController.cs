@@ -51,12 +51,15 @@ public class PlayerController : MonoBehaviour
             aim.eulerAngles = new Vector3(0, 0, angle);
 
             Attack();
+
+            Skill();
         }
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
+        if (!playerCore.assassinShowtime)
+            rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
     }
 
     public void Attack()
@@ -91,10 +94,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    //if (combo == 3)
-                    //    combo = 0;
                     comboTimer = 0;
-
                     combo = 0;
                     playerCore.knightAtkCD = 0;
                     isKAttack = true;
@@ -109,8 +109,6 @@ public class PlayerController : MonoBehaviour
                         combo = 0;
                     isKAttack = false;
                 }
-
-
             }
 
             if (knightComboTimer)
@@ -164,5 +162,58 @@ public class PlayerController : MonoBehaviour
                 playerCore.AssassinAttack();
             }
         }
+    }
+
+    public void Skill()
+    {
+        if (playerCore.playerState == PlayerCore.Character.ARCHER)
+        {
+            if (Input.GetMouseButton(1) && !playerCore.archerSkill)
+            {
+                if (!playerCore.archerSkillCAM.activeInHierarchy)
+                    playerCore.archerSkillCAM.SetActive(true);
+            }
+            else if (Input.GetMouseButtonUp(1) && !playerCore.archerSkill)
+            {
+                playerCore.archerSkill = true;
+                GameObject AOE = Instantiate(playerCore.archerAOE, new Vector3(playerCore.archerSkillCAM.transform.position.x, playerCore.archerSkillCAM.transform.position.y, 0), Quaternion.identity);
+                Destroy(AOE, 2);
+                playerCore.archerSkillCAM.SetActive(false);
+                playerCore.archerSkillCAM.transform.position = transform.position;
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.F))
+        {
+            if (playerCore.playerState == PlayerCore.Character.KNIGHT && !playerCore.knightSkill)
+            {
+                playerCore.knightSkill = true;
+                playerCore.immunity = true;
+                playerCore.shield.SetActive(true);
+            }
+            else if (playerCore.playerState == PlayerCore.Character.ASSASSIN && !playerCore.assassinSkill)
+            {
+                playerCore.immunity = true;
+                playerCore.trail.SetActive(true);
+                playerCore.assassinShowtime = true;
+                playerCore.assassinSkill = true;
+                if (rb != null)
+                {
+                    Vector2 diff = mousePos - transform.position;
+                    diff = diff.normalized * playerCore.assassinGoForce;
+                    rb.AddForce(diff, ForceMode2D.Impulse);
+                    StartCoroutine(AssasinGo());
+                }
+            }
+        }  
+    }
+
+    IEnumerator AssasinGo()
+    {
+        yield return new WaitForSeconds(0.3f);
+        rb.velocity = Vector2.zero;
+        playerCore.immunity = false;
+        playerCore.trail.SetActive(false);
+        playerCore.assassinShowtime = false;
     }
 }

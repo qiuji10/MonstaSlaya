@@ -9,6 +9,7 @@ public class PlayerCore : MonoBehaviour
 
     public float speed = 10f;
     public bool isParalyzed;
+    public bool immunity;
     private float paralyzedTimer;
 
     Animator animator;
@@ -19,6 +20,9 @@ public class PlayerCore : MonoBehaviour
 
     [Header("Knight")]
     public Transform knightAtkPoint;
+    public GameObject shield;
+    public bool knightSkill;
+    private float knightSkillTimer;
     public float knightAtkRate = 0.5f;
     public float knightAtkCD = 0.5f;
     public int knightDamage = 1;
@@ -27,7 +31,9 @@ public class PlayerCore : MonoBehaviour
 
     [Header("Archer")]
     public Transform archerAim;
-    public GameObject arrow;
+    public GameObject arrow, archerAOE, archerSkillCAM;
+    public bool archerSkill;
+    public float archerSkillTimer;
     public float archerAtkRate = 0.8f;
     public float archerAtkCD = 0f;
     Vector3 archerAimDirection;
@@ -35,6 +41,10 @@ public class PlayerCore : MonoBehaviour
 
     [Header("Assassin")]
     public Transform assassinAtkPoint;
+    public GameObject trail;
+    public bool assassinSkill, assassinShowtime;
+    public float assassinSkillTimer;
+    public float assassinGoForce;
     public int assassinDamage = 1;
     public float assassinAtkRange = 1f;
     [Space(20)]
@@ -83,6 +93,42 @@ public class PlayerCore : MonoBehaviour
                 paralyzedSymbol.SetActive(false);
                 speed = 10;
                 isParalyzed = false;
+            }
+        }
+
+        if (knightSkill)
+        {
+            knightSkillTimer += Time.deltaTime;
+            if (knightSkillTimer >= 5 || playerState != Character.KNIGHT)
+            {
+                immunity = false;
+                shield.SetActive(false);
+            }
+
+            if (knightSkillTimer >= 15)
+            {
+                knightSkillTimer = 0;
+                knightSkill = false;
+            }
+        }
+
+        if (archerSkill)
+        {
+            archerSkillTimer += Time.deltaTime;
+            if (archerSkillTimer >= 30)
+            {
+                archerSkillTimer = 0;
+                archerSkill = false;
+            }
+        }
+
+        if (assassinSkill)
+        {
+            assassinSkillTimer += Time.deltaTime;
+            if (assassinSkillTimer >= 7)
+            {
+                assassinSkillTimer = 0;
+                assassinSkill = false;
             }
         }
     }
@@ -182,7 +228,8 @@ public class PlayerCore : MonoBehaviour
 
     public void PlayerDamaged(int damage)
     {
-        Debug.Log("Hitting player");
+        if (!immunity)
+            Debug.Log("Hitting player");
     }
 
     public IEnumerator Paralyzed()

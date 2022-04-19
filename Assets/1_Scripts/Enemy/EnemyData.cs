@@ -22,12 +22,30 @@ public class EnemyData : MonoBehaviour
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
-            Debug.Log("Rigidbody");
             Vector2 diff = transform.position - playerPos;
             diff = diff.normalized * knockForce;
             rigidbody.AddForce(diff, ForceMode2D.Impulse);
             StartCoroutine(Knockback(rigidbody));
         }
+        GameObject DamageText = Instantiate(damageText, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
+        DamageText.GetComponent<TextMeshPro>().text = damaged.ToString();
+        Destroy(DamageText, 0.3f);
+        currenthealth -= damaged;
+        StartCoroutine(DamageSprite());
+
+        if (currenthealth <= 0)
+        {
+            if (gameObject != null)
+                Destroy(gameObject);
+            else
+                Debug.LogWarning("Couldn't found enemy gameobject!");
+        }
+    }
+
+    public void TakeDamage(int damaged)
+    {
+        Debug.Log("Enemy Hitted");
+        
         GameObject DamageText = Instantiate(damageText, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
         DamageText.GetComponent<TextMeshPro>().text = damaged.ToString();
         Destroy(DamageText, 0.3f);
