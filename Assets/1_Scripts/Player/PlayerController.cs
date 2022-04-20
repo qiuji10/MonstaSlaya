@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     PlayerCore playerCore;
     Transform aim;
+    UIManager uiManager;
 
     [Space(20)]
     public Vector2 movement;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerCore = GetComponent<PlayerCore>();
         aim = transform.Find("Aim");
+        uiManager = FindObjectOfType<UIManager>();
     }
 
     void Update()
@@ -175,6 +177,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetMouseButtonUp(1) && !playerCore.archerSkill)
             {
+                uiManager.ArcherCD.fillAmount = 0;
+                uiManager.ArcherText.gameObject.SetActive(true);
                 playerCore.archerSkill = true;
                 GameObject AOE = Instantiate(playerCore.archerAOE, new Vector3(playerCore.archerSkillCAM.transform.position.x, playerCore.archerSkillCAM.transform.position.y, -1), Quaternion.identity);
                 Destroy(AOE, 2);
@@ -189,12 +193,16 @@ public class PlayerController : MonoBehaviour
             {
                 playerCore.knightSkill = true;
                 playerCore.immunity = true;
+                uiManager.KnightCD.fillAmount = 0;
+                uiManager.KnightText.gameObject.SetActive(true);
                 playerCore.shield.SetActive(true);
             }
             else if (playerCore.playerState == PlayerCore.Character.ASSASSIN && !playerCore.assassinSkill)
             {
                 playerCore.immunity = true;
                 playerCore.trail.SetActive(true);
+                uiManager.AssassinCD.fillAmount = 0;
+                uiManager.AssassinText.gameObject.SetActive(true);
                 playerCore.assassinShowtime = true;
                 playerCore.assassinSkill = true;
                 if (rb != null)

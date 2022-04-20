@@ -7,8 +7,10 @@ public class PlayerCore : MonoBehaviour
 {
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
-    public float speed = 10f;
-    public bool isParalyzed;
+    [Header("Player")]
+    public int maxHealth, currentHealth, maxShield, currentShield;
+    public float speed = 10f, recoverTimePerSec = 3f, recoverTimer;
+    public bool isParalyzed, statusChanged;
     public bool immunity;
     private float paralyzedTimer;
 
@@ -17,15 +19,17 @@ public class PlayerCore : MonoBehaviour
     SpriteRenderer sp;
     CinemachineImpulseSource impSource;
     GameObject paralyzedSymbol;
+    UIManager uiManager;
 
     [Header("Knight")]
     public Transform knightAtkPoint;
     public GameObject shield;
     public bool knightSkill;
-    private float knightSkillTimer;
+    public float knightSkillTimer;
+    public float knightCDTime = 20;
     public float knightAtkRate = 0.5f;
     public float knightAtkCD = 0.5f;
-    public int knightDamage = 1;
+    public int knightDamage = 6;
     public float knightAtkRange = 1.2f;
     [Space(20)]
 
@@ -35,6 +39,7 @@ public class PlayerCore : MonoBehaviour
     public CinemachineVirtualCamera vcam1;
     public bool archerSkill;
     public float archerSkillTimer;
+    public float archerCDTime = 30;
     public float archerAtkRate = 0.8f;
     public float archerAtkCD = 0f;
     Vector3 archerAimDirection;
@@ -45,6 +50,7 @@ public class PlayerCore : MonoBehaviour
     public GameObject trail;
     public bool assassinSkill, assassinShowtime;
     public float assassinSkillTimer;
+    public float assassinCDTime = 6;
     public float assassinGoForce;
     public int assassinDamage = 1;
     public float assassinAtkRange = 1f;
@@ -59,8 +65,19 @@ public class PlayerCore : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
+        uiManager = FindObjectOfType<UIManager>();
         paralyzedSymbol = transform.Find("Paralyzed").gameObject;
-        vcam1 = transform.Find("ArcherSkill").GetComponentInChildren<CinemachineVirtualCamera>();
+        //vcam1 = transform.Find("ArcherSkill").GetComponentInChildren<CinemachineVirtualCamera>();
+    }
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+        currentShield = maxShield;
+        uiManager.MaxHealthText.text = maxHealth.ToString();
+        uiManager.MaxShieldText.text = maxShield.ToString();
+        uiManager.CurrentHealthText.text = currentHealth.ToString();
+        uiManager.CurrentShieldText.text = currentShield.ToString();
     }
 
     void Update()
@@ -107,8 +124,9 @@ public class PlayerCore : MonoBehaviour
                 shield.SetActive(false);
             }
 
-            if (knightSkillTimer >= 15)
+            if (knightSkillTimer >= knightCDTime)
             {
+                uiManager.KnightText.gameObject.SetActive(false);
                 knightSkillTimer = 0;
                 knightSkill = false;
             }
@@ -117,8 +135,9 @@ public class PlayerCore : MonoBehaviour
         if (archerSkill)
         {
             archerSkillTimer += Time.deltaTime;
-            if (archerSkillTimer >= 30)
+            if (archerSkillTimer >= archerCDTime)
             {
+                uiManager.ArcherText.gameObject.SetActive(false);
                 archerSkillTimer = 0;
                 archerSkill = false;
             }
@@ -127,11 +146,28 @@ public class PlayerCore : MonoBehaviour
         if (assassinSkill)
         {
             assassinSkillTimer += Time.deltaTime;
-            if (assassinSkillTimer >= 7)
+            if (assassinSkillTimer >= assassinCDTime)
             {
+                uiManager.AssassinText.gameObject.SetActive(false);
                 assassinSkillTimer = 0;
                 assassinSkill = false;
             }
+        }
+
+        if (currentShield < maxShield && currentHealth > 0)
+        {
+            recoverTimer += 1.0f / recoverTimePerSec * Time.deltaTime;
+
+            if (currentShield + 1 <= recoverTimer)
+            {
+                currentShield = Mathf.FloorToInt(recoverTimer);
+                uiManager.CurrentShieldText.text = currentShield.ToString();
+                statusChanged = true;
+            }
+        }
+        else if (currentShield >= maxShield)
+        {
+            recoverTimer = 0;
         }
     }
 
@@ -185,7 +221,7 @@ public class PlayerCore : MonoBehaviour
             if (enemy.GetComponent<EnemyBase>() != null && playerState == Character.KNIGHT && combo == 3)
             {
                 impSource.GenerateImpulse();
-                enemy.GetComponent<EnemyBase>().TakeDamage((damage + 3), transform.position);
+                enemy.GetComponent<EnemyBase>().TakeDamage((damage + 2), transform.position);
                 continue;
             }
 
@@ -231,7 +267,51 @@ public class PlayerCore : MonoBehaviour
     public void PlayerDamaged(int damage)
     {
         if (!immunity)
-            Debug.Log("Hitting player");
+        {
+            Debug.Log("Hitting player " + damage);
+            if (currentShield > 0)
+            {
+                Debug.Log("0");
+                currentShield -= damage;
+                recoverTimer = currentShield;
+
+                if (currentShield < 0 && currentHealth > 0)
+                {
+                    Debug.Log("1");
+                    damage -= maxShield;
+                    currentShield = 0;
+                    uiManager.CurrentShieldText.text = currentShield.ToString();
+                    currentHealth -= damage;
+                    if (currentHealth < 0)
+                    {
+                        currentHealth = 0;
+                    }
+                    uiManager.CurrentHealthText.text = currentHealth.ToString();
+                }
+            }
+
+            if (currentShield <= 0 && currentHealth > 0)
+            {
+                Debug.Log("2");
+                currentHealth -= damage;
+                if (currentHealth < 0)
+                {
+                    currentHealth = 0;
+                }
+            }
+
+            statusChanged = true;
+            uiManager.CurrentShieldText.text = currentShield.ToString();
+            uiManager.CurrentHealthText.text = currentHealth.ToString();
+
+            StartCoroutine(DamageSprite());
+
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                Debug.Log("PlayerDie");
+            }
+        }
     }
 
     public IEnumerator Paralyzed()
@@ -239,6 +319,14 @@ public class PlayerCore : MonoBehaviour
         playerController.enabled = false;
         yield return new WaitForSeconds(5);
         playerController.enabled = true;
+    }
+
+    IEnumerator DamageSprite()
+    {
+        sp = GetComponentInChildren<SpriteRenderer>();
+        sp.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        sp.color = Color.white;
     }
 
     private void OnDrawGizmosSelected()
