@@ -18,7 +18,7 @@ MonoBehaviour:
     volume: 0.455
   - clip: {fileID: 8300000, guid: b976e54d6a04b414da131904293303e6, type: 3}
     name: Jump_End
-    volume: 0.238
+    volume: 0.397
   - clip: {fileID: 8300000, guid: c4fbc68cfe4e99647a1cd227aaab91e0, type: 3}
     name: Rage
     volume: 0.328
