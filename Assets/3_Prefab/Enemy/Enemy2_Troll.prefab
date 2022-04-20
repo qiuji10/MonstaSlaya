@@ -295,7 +295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 18
   currenthealth: 0
-  damage: 0
+  damage: 2
   speed: 2
   damageText: {fileID: 4104907401833593607, guid: c9d6c0fa26500f746ad7995a027489aa, type: 3}
   minDistance: 2
