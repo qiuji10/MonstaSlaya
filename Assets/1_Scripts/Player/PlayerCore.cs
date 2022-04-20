@@ -7,19 +7,28 @@ public class PlayerCore : MonoBehaviour
 {
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
-    [Header("Player")]
-    public int maxHealth, currentHealth, maxShield, currentShield;
-    public float speed = 10f, recoverTimePerSec = 3f, recoverTimer;
-    public bool isParalyzed, statusChanged;
-    public bool immunity;
-    private float paralyzedTimer;
-
     Animator animator;
     PlayerController playerController;
     SpriteRenderer sp;
     CinemachineImpulseSource impSource;
     GameObject paralyzedSymbol;
     UIManager uiManager;
+    GameSceneManager gsm;
+    [SerializeField] AudioData knightAudio, archerAudio, assassinAudio;
+
+    public AudioData KnightAudio { get { return knightAudio; } }
+    public AudioData ArcherAudio { get { return archerAudio; } }
+    public AudioData AssassinAudio { get { return assassinAudio; } }
+
+    [Header("Player")]
+    public int maxHealth;
+    public int currentHealth;
+    public int maxShield;
+    public int currentShield;
+    public float speed = 10f, recoverTimePerSec = 3f, recoverTimer;
+    public bool isParalyzed, statusChanged, immunity;
+    private float paralyzedTimer;
+    [Space(20)]
 
     [Header("Knight")]
     public Transform knightAtkPoint;
@@ -36,7 +45,6 @@ public class PlayerCore : MonoBehaviour
     [Header("Archer")]
     public Transform archerAim;
     public GameObject arrow, archerAOE, archerSkillCAM;
-    public CinemachineVirtualCamera vcam1;
     public bool archerSkill;
     public float archerSkillTimer;
     public float archerCDTime = 30;
@@ -64,10 +72,10 @@ public class PlayerCore : MonoBehaviour
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
+        gsm = FindObjectOfType<GameSceneManager>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         uiManager = FindObjectOfType<UIManager>();
         paralyzedSymbol = transform.Find("Paralyzed").gameObject;
-        //vcam1 = transform.Find("ArcherSkill").GetComponentInChildren<CinemachineVirtualCamera>();
     }
 
     private void Start()
@@ -174,11 +182,20 @@ public class PlayerCore : MonoBehaviour
     public void KnightAttack(int atkCombo)
     {
         if (atkCombo == 1 || atkCombo == 0)
+        {
+            AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_1");
             animator.SetTrigger("KnightAttack1");
+        }
         else if (atkCombo == 2)
+        {
+            AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_2");
             animator.SetTrigger("KnightAttack2");
+        }
         else if (atkCombo == 3)
+        {
+            AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_3");
             animator.SetTrigger("KnightAttack3");
+        }
         MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage, atkCombo);
     }
 
@@ -210,6 +227,7 @@ public class PlayerCore : MonoBehaviour
     public void AssassinAttack()
     {
         animator.SetTrigger("AssassinAttack");
+        AudioManager.instance.PlaySFX(AssassinAudio, "Assassin_Attack");
         MeleeAttack(assassinAtkPoint.position, assassinAtkRange, assassinDamage, 1);
     }
 
@@ -227,10 +245,7 @@ public class PlayerCore : MonoBehaviour
 
             if (enemy.GetComponent<EnemyBase>() != null)
             {
-                //Vector2 dist = transform.position - enemy.gameObject.transform.position;
-                //Vector2 force = dist * 3;//knockbackForce
                 enemy.GetComponent<EnemyBase>().TakeDamage(damage, transform.position);
-                //enemy.GetComponent<Rigidbody2D>().AddForce(force * Time.fixedDeltaTime, ForceMode2D.Impulse);
             }
             else
                 Destroy(enemy.transform.parent.gameObject);
@@ -268,35 +283,31 @@ public class PlayerCore : MonoBehaviour
     {
         if (!immunity)
         {
-            Debug.Log("Hitting player " + damage);
+            if (currentShield <= 0)
+            {
+                currentHealth -= damage;
+                if (currentHealth < 0 || currentHealth > maxHealth)
+                {
+                    currentHealth = 0;
+                }
+            }
+
             if (currentShield > 0)
             {
-                Debug.Log("0");
                 currentShield -= damage;
                 recoverTimer = currentShield;
 
                 if (currentShield < 0 && currentHealth > 0)
                 {
-                    Debug.Log("1");
-                    damage -= maxShield;
+                    int overflowDamage = -(currentShield);
                     currentShield = 0;
                     uiManager.CurrentShieldText.text = currentShield.ToString();
-                    currentHealth -= damage;
+                    currentHealth -= overflowDamage;
                     if (currentHealth < 0)
                     {
                         currentHealth = 0;
                     }
                     uiManager.CurrentHealthText.text = currentHealth.ToString();
-                }
-            }
-
-            if (currentShield <= 0 && currentHealth > 0)
-            {
-                Debug.Log("2");
-                currentHealth -= damage;
-                if (currentHealth < 0)
-                {
-                    currentHealth = 0;
                 }
             }
 
@@ -309,7 +320,22 @@ public class PlayerCore : MonoBehaviour
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
-                Debug.Log("PlayerDie");
+                playerController.enabled = false;
+
+                if (playerState == Character.KNIGHT)
+                {
+                    animator.SetTrigger("KnightDeath");
+                }
+                else if (playerState == Character.ARCHER)
+                {
+                    animator.SetTrigger("ArcherDeath");
+                }
+                else if (playerState == Character.ASSASSIN)
+                {
+                    animator.SetTrigger("AssassinDeath");
+                }
+
+                gsm.SwitchScene(2);
             }
         }
     }

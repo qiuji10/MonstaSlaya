@@ -8,6 +8,7 @@ public class Boss_RAGE : Boss_BaseState
     {
         boss.Enemy.speed = 0;
         boss.Enemy.Anim.SetTrigger("RageTrigger");
+        AudioManager.instance.PlaySFX(boss.GolemAudio, "Rage");
         boss.isRage = true;
     }
 

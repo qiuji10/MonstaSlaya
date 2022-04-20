@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82bda2def3cdaaf4a9538056f97bbaa5, type: 3}
+  m_Name: SFX_Knight
+  m_EditorClassIdentifier: 
+  audioList:
+  - clip: {fileID: 8300000, guid: aaf1bfd02a790374d8ae00b3d15ad834, type: 3}
+    name: Knight_Attack_1
+    volume: 0.276
+  - clip: {fileID: 8300000, guid: 69d2378c5396a734e98240b6ce7b5b2a, type: 3}
+    name: Knight_Attack_2
+    volume: 0.286
+  - clip: {fileID: 8300000, guid: ea50f1eeaf5a6a84e98b3634c90c2f5f, type: 3}
+    name: Knight_Attack_3
+    volume: 0.276
+  - clip: {fileID: 8300000, guid: d7321cc5af8e4d648a8d08864b32a414, type: 3}
+    name: Knight_Skill
+    volume: 0.313

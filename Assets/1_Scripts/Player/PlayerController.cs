@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
             else if (playerCore.archerAtkCD >= playerCore.archerAtkRate && Input.GetMouseButton(0) && !isAiming)
             {
+                AudioManager.instance.PlaySFX(playerCore.ArcherAudio, "Archer_Attack_Bow");
                 playerCore.archerAtkCD = 0;
                 playerCore.ArcherAttack();
                 isAiming = true;
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonUp(0))
                 {
+                    AudioManager.instance.PlaySFX(playerCore.ArcherAudio, "Archer_Attack_Shoot");
                     int max = Mathf.CeilToInt(maxAngle * 10);
                     int min = Mathf.FloorToInt(minAngle * 10);
 
@@ -177,6 +179,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetMouseButtonUp(1) && !playerCore.archerSkill)
             {
+                AudioManager.instance.PlaySFX(playerCore.ArcherAudio, "Archer_Skill_Shoot");
+                AudioManager.instance.PlaySFX(playerCore.ArcherAudio, "Archer_Skill_Drop");
                 uiManager.ArcherCD.fillAmount = 0;
                 uiManager.ArcherText.gameObject.SetActive(true);
                 playerCore.archerSkill = true;
@@ -191,6 +195,7 @@ public class PlayerController : MonoBehaviour
         {
             if (playerCore.playerState == PlayerCore.Character.KNIGHT && !playerCore.knightSkill)
             {
+                AudioManager.instance.PlaySFX(playerCore.KnightAudio, "Knight_Skill");
                 playerCore.knightSkill = true;
                 playerCore.immunity = true;
                 uiManager.KnightCD.fillAmount = 0;
@@ -199,6 +204,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (playerCore.playerState == PlayerCore.Character.ASSASSIN && !playerCore.assassinSkill)
             {
+                AudioManager.instance.PlaySFX(playerCore.AssassinAudio, "Assassin_Skill");
                 playerCore.immunity = true;
                 playerCore.trail.SetActive(true);
                 uiManager.AssassinCD.fillAmount = 0;

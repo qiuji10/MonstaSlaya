@@ -9,6 +9,8 @@ public class Boss_SMASH : Boss_BaseState
         boss.Enemy.Anim.ResetTrigger("Smash");
         boss.Enemy.Anim.SetTrigger("Smash");
 
+        AudioManager.instance.PlaySFX(boss.GolemAudio, "Smash");
+
         if (boss.isRage)
             boss.BulletCircle(100);
         else

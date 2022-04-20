@@ -18,10 +18,13 @@ public class Boss_FSM : MonoBehaviour
     EnemyBase enemy;
     Transform aimDirection;
     Transform aimDirection2;
+    GameSceneManager gsm;
+    [SerializeField] AudioData golemAudio;
     public Boss_HealthSlider healthBar;
     public CinemachineImpulseSource impSource;
     public GameObject RockPrefab, enemyBullet;
 
+    public AudioData GolemAudio { get { return golemAudio; } }
     public Rigidbody2D Rb { get { return rb; } }
     public EnemyBase Enemy { get { return enemy; } } 
     public Boss_BaseState CurrentState { get { return currentState; } }
@@ -33,12 +36,14 @@ public class Boss_FSM : MonoBehaviour
     public readonly Boss_SMASH smashState = new Boss_SMASH();
     public readonly Boss_THROW throwState = new Boss_THROW();
     public readonly Boss_RAGE rageState = new Boss_RAGE();
+    public readonly Boss_DEATH deathState = new Boss_DEATH();
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         enemy = GetComponent<EnemyBase>();
         bossOriginalSpeed = Enemy.speed;
+        gsm = FindObjectOfType<GameSceneManager>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         aimDirection = transform.Find("Aimer").transform;
         aimDirection2 = transform.Find("Aimer2").transform;
@@ -47,7 +52,7 @@ public class Boss_FSM : MonoBehaviour
 
     void Start()
     {
-        SetState(smashState);
+        SetState(restState);
     }
 
     void Update()
@@ -138,5 +143,18 @@ public class Boss_FSM : MonoBehaviour
         impSource.GenerateImpulse();
         impSource.m_DefaultVelocity.x = impSource.m_DefaultVelocity.y = -0.1f;
         impSource.m_ImpulseDefinition.m_TimeEnvelope.m_SustainTime = 0.2f;
+    }
+
+    public void End()
+    {
+        SetState(deathState);
+        AudioManager.instance.StopBGM();
+        StartCoroutine(SwitchToWin());
+    }
+
+    IEnumerator SwitchToWin()
+    {
+        yield return new WaitForSeconds(3f);
+        gsm.SwitchScene(3);
     }
 }

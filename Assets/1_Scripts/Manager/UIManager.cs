@@ -46,10 +46,8 @@ public class UIManager : MonoBehaviour
         if (playerCore.statusChanged)
         {
             playerCore.statusChanged = false;
-            Debug.Log(playerCore.currentHealth + " " + playerCore.currentShield);
             HealthFill.fillAmount = (float)playerCore.currentHealth / (float)playerCore.maxHealth;
             ShieldFill.fillAmount = (float)playerCore.currentShield / (float)playerCore.maxShield;
-            Debug.Log("health fill: " + HealthFill.fillAmount +"  shield fill: " + ShieldFill.fillAmount);
         }
     }
 }

@@ -8,6 +8,7 @@ public class Boss_JUMP : Boss_BaseState
     {
         boss.Enemy.speed = 0;
         boss.Enemy.Anim.SetTrigger("JumpStart");
+        AudioManager.instance.PlaySFX(boss.GolemAudio, "Jump_Start");
     }
 
     public override void Update(Boss_FSM boss)
@@ -41,6 +42,7 @@ public class Boss_JUMP : Boss_BaseState
             {
                 boss.jumpTimeOut = false;
                 boss.inStateTimer = 0;
+                AudioManager.instance.PlaySFX(boss.GolemAudio, "Jump_Start");
                 boss.Enemy.Anim.ResetTrigger("JumpTargeting");
                 boss.Enemy.Anim.SetTrigger("JumpEnd");
                 //boss.StartCoroutine(boss.Shake()); //alr make the shake in animation key event

@@ -32,14 +32,8 @@ public class EnemyData : MonoBehaviour
         Destroy(DamageText, 0.3f);
         currenthealth -= damaged;
         StartCoroutine(DamageSprite());
-
         if (currenthealth <= 0)
-        {
-            if (gameObject != null)
-                Destroy(gameObject);
-            else
-                Debug.LogWarning("Couldn't found enemy gameobject!");
-        }
+            Death();
     }
 
     public void TakeDamage(int damaged)
@@ -51,8 +45,17 @@ public class EnemyData : MonoBehaviour
         Destroy(DamageText, 0.3f);
         currenthealth -= damaged;
         StartCoroutine(DamageSprite());
-
         if (currenthealth <= 0)
+            Death();
+    }
+
+    private void Death()
+    {
+        if (GetComponent<Boss_FSM>() != null)
+        {
+            GetComponent<Boss_FSM>().End();
+        }
+        else
         {
             if (gameObject != null)
                 Destroy(gameObject);
