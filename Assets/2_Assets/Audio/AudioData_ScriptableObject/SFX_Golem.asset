@@ -21,7 +21,7 @@ MonoBehaviour:
     volume: 0.397
   - clip: {fileID: 8300000, guid: c4fbc68cfe4e99647a1cd227aaab91e0, type: 3}
     name: Rage
-    volume: 0.328
+    volume: 0.164
   - clip: {fileID: 8300000, guid: c34451f3818261d42a6d46d899aa5206, type: 3}
     name: Smash
-    volume: 1
+    volume: 0.18

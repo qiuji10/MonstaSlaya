@@ -19,7 +19,9 @@ public class Boss_FSM : MonoBehaviour
     Transform aimDirection;
     Transform aimDirection2;
     GameSceneManager gsm;
+    Timer timer;
     [SerializeField] AudioData golemAudio;
+    [SerializeField] GameStats gameStats;
     public Boss_HealthSlider healthBar;
     public CinemachineImpulseSource impSource;
     public GameObject RockPrefab, enemyBullet;
@@ -40,6 +42,7 @@ public class Boss_FSM : MonoBehaviour
 
     void Awake()
     {
+        timer = FindObjectOfType<Timer>();
         rb = GetComponent<Rigidbody2D>();
         enemy = GetComponent<EnemyBase>();
         bossOriginalSpeed = Enemy.speed;
@@ -147,6 +150,11 @@ public class Boss_FSM : MonoBehaviour
 
     public void End()
     {
+        gameStats.state = enemy.target.GetComponent<PlayerCore>().playerState;
+        gameStats.time = timer.timerText.text;
+        gameStats.milliseconds = timer.milliseconds;
+        gameStats.seconds = timer.seconds;
+        gameStats.minutes = timer.minutes;
         SetState(deathState);
         AudioManager.instance.StopBGM();
         StartCoroutine(SwitchToWin());

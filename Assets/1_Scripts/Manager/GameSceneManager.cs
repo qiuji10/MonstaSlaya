@@ -34,6 +34,11 @@ public class GameSceneManager : MonoBehaviour
         StartCoroutine(LoadGameScene(indexBuild));
     }
 
+    public int GetSceneIndex()
+    {
+        return SceneManager.GetActiveScene().buildIndex;
+    }
+
     IEnumerator LoadGameScene(int iB)
     {
         crossFadeIn.SetActive(true);

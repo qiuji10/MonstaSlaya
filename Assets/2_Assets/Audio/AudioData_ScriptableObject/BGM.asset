@@ -15,10 +15,10 @@ MonoBehaviour:
   audioList:
   - clip: {fileID: 8300000, guid: 542861445792fa1429489878896ca08d, type: 3}
     name: Menu
-    volume: 0.302
+    volume: 0.149
   - clip: {fileID: 8300000, guid: 4f6269f90dfe2a34a9ebf89f70976f48, type: 3}
     name: NormalBattle
-    volume: 0.17
+    volume: 0.075
   - clip: {fileID: 8300000, guid: 1a1289a4ceff9a34b995f9317f812952, type: 3}
     name: Boss
     volume: 0.18
@@ -27,4 +27,4 @@ MonoBehaviour:
     volume: 0.265
   - clip: {fileID: 8300000, guid: 907633a686d3da74bab6afde02637fc5, type: 3}
     name: Win
-    volume: 0.212
+    volume: 0.101

@@ -14,7 +14,9 @@ public class PlayerCore : MonoBehaviour
     GameObject paralyzedSymbol;
     UIManager uiManager;
     GameSceneManager gsm;
+    Timer timer;
     [SerializeField] AudioData knightAudio, archerAudio, assassinAudio;
+    [SerializeField] GameStats gameStats;
 
     public AudioData KnightAudio { get { return knightAudio; } }
     public AudioData ArcherAudio { get { return archerAudio; } }
@@ -72,6 +74,7 @@ public class PlayerCore : MonoBehaviour
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
+        timer = FindObjectOfType<Timer>();
         gsm = FindObjectOfType<GameSceneManager>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         uiManager = FindObjectOfType<UIManager>();
@@ -324,17 +327,21 @@ public class PlayerCore : MonoBehaviour
 
                 if (playerState == Character.KNIGHT)
                 {
+                    gameStats.state = Character.KNIGHT;
                     animator.SetTrigger("KnightDeath");
                 }
                 else if (playerState == Character.ARCHER)
                 {
+                    gameStats.state = Character.ARCHER;
                     animator.SetTrigger("ArcherDeath");
                 }
                 else if (playerState == Character.ASSASSIN)
                 {
+                    gameStats.state = Character.ASSASSIN;
                     animator.SetTrigger("AssassinDeath");
                 }
 
+                gameStats.time = timer.timerText.text;
                 gsm.SwitchScene(2);
             }
         }
