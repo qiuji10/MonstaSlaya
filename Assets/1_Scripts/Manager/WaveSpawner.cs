@@ -35,6 +35,7 @@ public class WaveSpawner : MonoBehaviour
     private float searchCountdown = 1f;
     private int nextWave = 0;
     private bool isEnd;
+    [SerializeField] AudioData end;
     [SerializeField]
     private Vector2 maxSpawnPos, minSpawnPos;
 
@@ -69,6 +70,8 @@ public class WaveSpawner : MonoBehaviour
                 if (isEnd)
                 {
                     state = SpawnState.NOTHING;
+                    AudioManager.instance.PlaySFX(end, "EndBattle");
+                    AudioManager.instance.StopBGM();
                     GetComponentInChildren<DoorTrigger>().SetWallStatus(false);
                 }
                 else

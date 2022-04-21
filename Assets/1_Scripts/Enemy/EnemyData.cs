@@ -22,8 +22,6 @@ public class EnemyData : MonoBehaviour
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
-            Debug.Log("Rigidbody");
-            //rigidbody.isKinematic = false;
             Vector2 diff = transform.position - playerPos;
             diff = diff.normalized * knockForce;
             rigidbody.AddForce(diff, ForceMode2D.Impulse);
@@ -34,8 +32,30 @@ public class EnemyData : MonoBehaviour
         Destroy(DamageText, 0.3f);
         currenthealth -= damaged;
         StartCoroutine(DamageSprite());
-
         if (currenthealth <= 0)
+            Death();
+    }
+
+    public void TakeDamage(int damaged)
+    {
+        Debug.Log("Enemy Hitted");
+        
+        GameObject DamageText = Instantiate(damageText, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
+        DamageText.GetComponent<TextMeshPro>().text = damaged.ToString();
+        Destroy(DamageText, 0.3f);
+        currenthealth -= damaged;
+        StartCoroutine(DamageSprite());
+        if (currenthealth <= 0)
+            Death();
+    }
+
+    private void Death()
+    {
+        if (GetComponent<Boss_FSM>() != null)
+        {
+            GetComponent<Boss_FSM>().End();
+        }
+        else
         {
             if (gameObject != null)
                 Destroy(gameObject);
@@ -56,6 +76,5 @@ public class EnemyData : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         rb.velocity = Vector2.zero;
-        //rb.isKinematic = true;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class DoorTrigger : MonoBehaviour
 {
     [SerializeField] List<GameObject> walls = new List<GameObject>();
+    [SerializeField] AudioData battleBGM;
     public bool doorTriggerd;
 
     public void SetWallStatus(bool status)
@@ -20,7 +21,13 @@ public class DoorTrigger : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             if (!doorTriggerd)
+            {
+                if (GetComponentInParent<BossRoomManager>() != null)
+                    AudioManager.instance.PlayBGM(battleBGM, "Boss");
+                else
+                    AudioManager.instance.PlayBGM(battleBGM, "NormalBattle");
                 SetWallStatus(true);
+            }
             doorTriggerd = true;
         }
     }

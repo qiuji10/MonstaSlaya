@@ -458,9 +458,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253f7b15f25bc6b44939301b02d1eade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  maxHealth: 10
   currenthealth: 0
-  damage: 0
+  damage: 1
   speed: 8
   damageText: {fileID: 4104907401833593607, guid: c9d6c0fa26500f746ad7995a027489aa, type: 3}
   minDistance: 2.5

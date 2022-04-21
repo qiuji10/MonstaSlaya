@@ -6,6 +6,7 @@ using Cinemachine;
 public class Arrow : MonoBehaviour
 {
     public float speed;
+    public int dmg = 4;
 
     SpriteRenderer sp;
     CinemachineImpulseSource impSource;
@@ -40,8 +41,13 @@ public class Arrow : MonoBehaviour
         {
             Debug.Log("Hitting enemy");
             impSource.GenerateImpulse();
-            col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(2, transform.position);
+            col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(dmg, transform.position);
             Destroy(gameObject);
+
+            if (col.gameObject.GetComponent<Boss_FSM>() != null)
+            {
+                col.gameObject.GetComponent<Boss_FSM>().healthBar.BossHealthChange(dmg);
+            }
         }
 
         if (col.gameObject.CompareTag("Wall"))
