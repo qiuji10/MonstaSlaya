@@ -6,7 +6,7 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool isPaused = false;
 
-    public GameObject pauseMenu;
+    public GameObject pauseMenu, pauseButton;
     private GameSceneManager gsm;
     private UIAudioManager UI_audioManager;
 
@@ -34,6 +34,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         UI_audioManager.playSFX("Button");
+        pauseButton.SetActive(false);
         pauseMenu.SetActive(true);
         isPaused = true;
         Time.timeScale = 0f;
@@ -41,6 +42,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
+        pauseButton.SetActive(true);
         pauseMenu.SetActive(false);
         isPaused = false;
         Time.timeScale = 1f;
