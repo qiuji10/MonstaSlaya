@@ -26,6 +26,9 @@ public class GameSceneManager : MonoBehaviour
             case 3:
                 AudioManager.instance.PlayBGM(BGM, "Win");
                 break;
+            case 4:
+                AudioManager.instance.PlayBGM(BGM, "Menu");
+                break;
         }
     }
 

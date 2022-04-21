@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   time: 0
+  milliseconds: 0
+  seconds: 0
+  minutes: 0

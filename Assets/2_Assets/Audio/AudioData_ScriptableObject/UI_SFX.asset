@@ -15,4 +15,4 @@ MonoBehaviour:
   audioList:
   - clip: {fileID: 8300000, guid: c9299b9ced7e75a4e8a27c21cfc9cf21, type: 3}
     name: Button
-    volume: 0.323
+    volume: 0.154
