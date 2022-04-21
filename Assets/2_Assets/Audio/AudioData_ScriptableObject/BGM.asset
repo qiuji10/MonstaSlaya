@@ -18,10 +18,10 @@ MonoBehaviour:
     volume: 0.149
   - clip: {fileID: 8300000, guid: 4f6269f90dfe2a34a9ebf89f70976f48, type: 3}
     name: NormalBattle
-    volume: 0.075
+    volume: 0.181
   - clip: {fileID: 8300000, guid: 1a1289a4ceff9a34b995f9317f812952, type: 3}
     name: Boss
-    volume: 0.18
+    volume: 0.222
   - clip: {fileID: 8300000, guid: d818f433664f055428cd5740cdb9741d, type: 3}
     name: GameOver
     volume: 0.265

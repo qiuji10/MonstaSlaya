@@ -45,7 +45,7 @@ public class EnemyBulletBounce : MonoBehaviour
         {
             if (!col.isTrigger)
             {
-                col.gameObject.GetComponent<PlayerCore>().PlayerDamaged(2);
+                col.gameObject.GetComponent<PlayerCore>().PlayerDamaged(4);
                 Destroy(gameObject);
             }
         }

@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator AssasinGo()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.8f);
         rb.velocity = Vector2.zero;
         playerCore.immunity = false;
         playerCore.trail.SetActive(false);
