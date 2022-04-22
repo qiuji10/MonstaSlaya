@@ -94,7 +94,7 @@ The player able to switch character in any time they wanted. There are 3 charact
 **Character Skill**
 
 |Skill|Descriptions|
-| :-: | :-: |
+| :-: | :- |
 |<p></p><p>Knighty Shield</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.008.png)</p><p></p>|<p></p><p>Cooldown: 15s</p><p></p><p>After mouse right click, a circle shield will spawn around knight and remain for 5 seconds. During the 5 seconds, player able to immune from all damage</p>|
 |<p></p><p>Archery Boom</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.005.png)</p><p></p><p></p>|<p></p><p>Cooldown: 40s</p><p></p><p>When holding mouse right click, a targeting area will be appeared. Player can use mouse to determine where to cast the skill and release mouse right click to cast it. A total of 5 arrows will be dropped down and each arrow will deal 10 damage to enemy</p><p></p>|
 |<p></p><p>Assassinations</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.009.png)</p><p></p><p></p>|<p></p><p>Cooldown: 6s</p><p></p><p>After mouse right click, assassin will rush towards mouse directions. In the middle of rushing, player will immune from all damage.</p>|
@@ -125,7 +125,7 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 |Boss|Descriptions|
 | :- | :- |
-|<p></p><p>Kam the Golem</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.013.png)</p>|<p></p><p>Type: Melee/Range</p><p></p><p>Attack Moves: Jump, Rush, Smash, Throw</p><p>Special Moves: Rage</p><p></p><p>Jump</p><p>- In Jump Attack, the boss will jump to the air and a warning area will appear. The warning area will go towards player and jump down to deal damage to surrounding if chased player.  After 3 seconds, if boss couldn’t chase player, it will jump down too.</p><p>- In Rage mode, the speed of chasing player will be increased.</p><p></p><p>Rush</p><p>- In Rush Attack, the boss will become a rock and roll towards player’s position. The boss will deal damage if player collided with it while in Rush moves. After the Rush ends, the boss will immediately perform Smash moves.</p><p>- In Rage mode, the speed of chasing player will be increased.</p><p>Smash</p><p>- In Smash Attack, the boss will smash the floor and deal damage to surrounding. At the same time 4 bouncing bullets will spawned from smash and shoot towards player’s direction for every smash.</p><p>- In Rage mode, the boss will spawn 100 bouncing bullets per smash.</p><p></p><p>Throw</p><p>- In Throw Attack, the boss will throw a rock towards player’s direction. The rock will cause player damaged and enter paralyzed status</p><p>- In Rage mode, the number of rock throwing towards player is 3.</p><p></p><p>Rage Mode</p><p>- When boss health is lower than half, the boss will enter rage mode.</p><p>- In rage mode, every attack moves of bosses will become stronger.</p><p>- Speed and damage will be increased in rage mode</p><p></p><p></p><p></p>|
+|<p></p><p>Kam the Golem</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.013.png)</p>|<p></p><p>Type: Melee/Range</p><p></p><p>Attack Moves: Jump, Rush, Smash, Throw</p><p>Special Moves: Rage</p><p></p><p><br />Jump</p><p>- In Jump Attack, the boss will jump to the air and a warning area will appear. The warning area will go towards player and jump down to deal damage to surrounding if chased player.  After 3 seconds, if boss couldn’t chase player, it will jump down too.</p><p>- In Rage mode, the speed of chasing player will be increased.<br /><br /></p><p></p><p>Rush</p><p>- In Rush Attack, the boss will become a rock and roll towards player’s position. The boss will deal damage if player collided with it while in Rush moves. After the Rush ends, the boss will immediately perform Smash moves.</p><p>- In Rage mode, the speed of chasing player will be increased.<br /><br /></p><p>Smash</p><p>- In Smash Attack, the boss will smash the floor and deal damage to surrounding. At the same time 4 bouncing bullets will spawned from smash and shoot towards player’s direction for every smash.</p><p>- In Rage mode, the boss will spawn 100 bouncing bullets per smash.<br /><br /></p><p></p><p>Throw</p><p>- In Throw Attack, the boss will throw a rock towards player’s direction. The rock will cause player damaged and enter paralyzed status</p><p>- In Rage mode, the number of rock throwing towards player is 3.<br /><br /></p><p></p><p>Rage Mode</p><p>- When boss health is lower than half, the boss will enter rage mode.</p><p>- In rage mode, every attack moves of bosses will become stronger.</p><p>- Speed and damage will be increased in rage mode</p><p></p><p></p><p></p>|
 
 
 
@@ -150,9 +150,6 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 1. There are different win and lose screen background. Each background is determined on which is their last character after defeat boss / die in the gameplay levels. 
 
-Examples for win bg:
-
-![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.014.png)![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.014.png)![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.014.png)
 
 1. There are stopwatch timer to records player clear time after player win or lose, The best time record of wining levels will displayed on Main Menu.
 
