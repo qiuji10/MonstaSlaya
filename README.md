@@ -28,6 +28,7 @@ Student ID: 		0130919
 
 
 
+
 **Introduction**
 
 Hi, my name is Hong Yu. This is a game call MonstaSlaya that I made for Game Programming Assignment 3. MonstaSlaya is a game with genre of roguelike, player have to defeat all the enemies in the dungeon as fast as they can to win. There are 3 normal levels, 1 boss level.
@@ -95,9 +96,11 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 |Skill|Descriptions|
 | :-: | :- |
-|<p></p><p>Knighty Shield</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.008.png)</p><p></p>|<p></p><p>Cooldown: 15s</p><p></p><p>After mouse right click, a circle shield will spawn around knight and remain for 5 seconds. During the 5 seconds, player able to immune from all damage</p>|
-|<p></p><p>Archery Boom</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.005.png)</p><p></p><p></p>|<p></p><p>Cooldown: 40s</p><p></p><p>When holding mouse right click, a targeting area will be appeared. Player can use mouse to determine where to cast the skill and release mouse right click to cast it. A total of 5 arrows will be dropped down and each arrow will deal 10 damage to enemy</p><p></p>|
-|<p></p><p>Assassinations</p><p></p><p>![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.009.png)</p><p></p><p></p>|<p></p><p>Cooldown: 6s</p><p></p><p>After mouse right click, assassin will rush towards mouse directions. In the middle of rushing, player will immune from all damage.</p>|
+|<p></p><p>Knighty Shield</p><p></p><p>![knight_skill_logo](https://user-images.githubusercontent.com/74701224/164681042-e32f9f6e-5bb5-43ab-8ef0-e7c3bbba0096.png)</p><p></p>|<p></p><p>Cooldown: 15s</p><p></p><p>After mouse right click, a circle shield will spawn around knight and remain for 5 seconds. During the 5 seconds, player able to immune from all damage</p>|
+|<p></p><p>Archery Boom</p><p></p><p>![archer_skill_logo](https://user-images.githubusercontent.com/74701224/164680851-229569e9-75e3-41ba-b259-c19f84962b88.png)</p><p></p><p></p>|<p></p><p>Cooldown: 40s</p><p></p><p>When holding mouse right click, a targeting area will be appeared. Player can use mouse to determine where to cast the skill and release mouse right click to cast it. A total of 5 arrows will be dropped down and each arrow will deal 10 damage to enemy</p><p></p>|
+|<p></p><p>Assassinations</p><p></p><p>![assassin_skill_logo](https://user-images.githubusercontent.com/74701224/164681039-7d3acf75-a544-4be8-be34-60ef0b5cd0b9.png)</p><p></p><p></p>|<p></p><p>Cooldown: 6s</p><p></p><p>After mouse right click, assassin will rush towards mouse directions. In the middle of rushing, player will immune from all damage.</p>|
+
+
 
 
 
@@ -148,7 +151,11 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 **Additional**
 
-1. There are different win and lose screen background. Each background is determined on which is their last character after defeat boss / die in the gameplay levels. 
+1. There are different win and lose screen background. Each background is determined on which is their last character after defeat boss / die in the gameplay levels.<br/> For Examples: 
+
+![knight_bg](https://user-images.githubusercontent.com/74701224/164681217-95802ee2-9541-46b3-8507-b402ad50c5da.png)
+![archer_bg](https://user-images.githubusercontent.com/74701224/164681204-a8092561-d697-4406-9f84-bdc3670b4434.png)
+![assassin_bg](https://user-images.githubusercontent.com/74701224/164681211-1f15dad6-93a2-482a-a6b1-b514dc188283.png)
 
 
 1. There are stopwatch timer to records player clear time after player win or lose, The best time record of wining levels will displayed on Main Menu.
