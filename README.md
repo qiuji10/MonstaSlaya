@@ -4,8 +4,9 @@
 ![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.001.png)
 
 
-
+<br />
 Project Name: 	MonstaSlaya
+<br /><br />
 
 Course:		XBGT2054 Game Programming
 
@@ -16,28 +17,7 @@ Student ID: 		0130919
 
 
 
-
-
-
-**Content										Pg.**
-
-
-
-Introduction										1
-
-Control Scheme									1
-
-Gameplay										1
-
-Enemy Types										2
-
-Boss											3
-
-Additional										
-
-References and Sources								4
-
-
+<br /><br />
 
 
 
@@ -68,7 +48,7 @@ Hi, my name is Hong Yu. This is a game call MonstaSlaya that I made for Game Pro
 
 
 
-
+<br /><br />
 
 
 
@@ -96,17 +76,13 @@ For each normal level, there will have wave of monsters spawned at random positi
 
 The player will start with 7 health and 6 shields. When player was damaged, the damage will deal to the shield first. If there is no shield left, the damage will deal to health. If the shield only takes part of the damage and become 0, the overflow damage will deal to health. 
 
-![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.003.png)  					![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.003.png)
-
-`		          `**Health				           Shield**
-
 **Switch Character**
 
 The player able to switch character in any time they wanted. There are 3 characters in the game, knight, archer and assassin. Knight and assassin are melee type while archer is range type. All character’s attack direction can be controlled by mouse positioning. The switching sequence is Knight -> Archer -> Assassin -> Knight.
 
-![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.004.png)                                      ![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.005.png)                                          ![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.006.png)
+![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.004.png)                                      ![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.005.png)                         &nbsp;&nbsp;                 ![](pic/Aspose.Words.8a38efda-59ed-40b4-8ba4-3f49e688918b.006.png)
 
-`    `**Knight				 Archer		                      Assassin**
+&nbsp;**Knight        &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;    Archer    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;         Assassin**
 
 
 **Player Status**
@@ -144,6 +120,7 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 
 
+<br /><br />
 **Boss**
 
 |Boss|Descriptions|
@@ -166,6 +143,7 @@ The player able to switch character in any time they wanted. There are 3 charact
 
 
 
+<br /><br />
 
 
 **Additional**
@@ -190,6 +168,7 @@ Examples for win bg:
 
 
 
+<br /><br />
 
 
 **References and Sources**
