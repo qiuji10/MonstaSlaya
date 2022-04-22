@@ -242,12 +242,12 @@ public class PlayerCore : MonoBehaviour
             if (enemy.GetComponent<EnemyBase>() != null && playerState == Character.KNIGHT && combo == 3)
             {
                 impSource.GenerateImpulse();
-                enemy.GetComponent<EnemyBase>().TakeDamage((damage + 2), transform.position);
-                continue;
-            }
-
-            if (enemy.GetComponent<EnemyBase>() != null)
+                damage += 2;
+                enemy.GetComponent<EnemyBase>().TakeDamage((damage), transform.position);
+                Debug.Log("one");
+            }else if (enemy.GetComponent<EnemyBase>() != null && combo != 3)
             {
+                Debug.Log("two");
                 enemy.GetComponent<EnemyBase>().TakeDamage(damage, transform.position);
             }
             else
