@@ -39,7 +39,6 @@ public class Arrow : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Hitting enemy");
             impSource.GenerateImpulse();
             col.gameObject.GetComponentInParent<EnemyBase>().TakeDamage(dmg, transform.position);
             Destroy(gameObject);
