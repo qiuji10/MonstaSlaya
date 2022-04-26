@@ -12,7 +12,7 @@ public class Boss_SMASH : Boss_BaseState
         AudioManager.instance.PlaySFX(boss.GolemAudio, "Smash");
 
         if (boss.isRage)
-            boss.BulletCircle(100);
+            boss.BulletCircle(18);
         else
             boss.BulletCircle(4);
     }
