@@ -18,7 +18,6 @@ public class EnemyData : MonoBehaviour
 
     public void TakeDamage(int damaged, Vector3 playerPos)
     {
-        Debug.Log("Enemy Hitted");
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
@@ -38,8 +37,6 @@ public class EnemyData : MonoBehaviour
 
     public void TakeDamage(int damaged)
     {
-        Debug.Log("Enemy Hitted");
-        
         GameObject DamageText = Instantiate(damageText, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
         DamageText.GetComponent<TextMeshPro>().text = damaged.ToString();
         Destroy(DamageText, 0.3f);

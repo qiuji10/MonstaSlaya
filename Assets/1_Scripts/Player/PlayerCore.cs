@@ -244,10 +244,8 @@ public class PlayerCore : MonoBehaviour
                 impSource.GenerateImpulse();
                 damage += 2;
                 enemy.GetComponent<EnemyBase>().TakeDamage((damage), transform.position);
-                Debug.Log("one");
             }else if (enemy.GetComponent<EnemyBase>() != null && combo != 3)
             {
-                Debug.Log("two");
                 enemy.GetComponent<EnemyBase>().TakeDamage(damage, transform.position);
             }
             else
