@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet.Component.Animating;
 
-public class PlayerCore : MonoBehaviour
+public class PlayerCore : NetworkBehaviour
 {
     public enum Character { KNIGHT, ARCHER, ASSASSIN };
 
@@ -17,6 +20,8 @@ public class PlayerCore : MonoBehaviour
     Timer timer;
     [SerializeField] AudioData knightAudio, archerAudio, assassinAudio;
     [SerializeField] GameStats gameStats;
+
+    private NetworkAnimator _networkAnim;
 
     public AudioData KnightAudio { get { return knightAudio; } }
     public AudioData ArcherAudio { get { return archerAudio; } }
@@ -66,7 +71,7 @@ public class PlayerCore : MonoBehaviour
     public float assassinAtkRange = 1f;
     [Space(20)]
 
-    public Character playerState = Character.KNIGHT;
+    [SyncVar] public Character playerState = Character.KNIGHT;
     public LayerMask enemyLayers;
 
     void Awake()
@@ -74,10 +79,12 @@ public class PlayerCore : MonoBehaviour
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         sp = GetComponent<SpriteRenderer>();
+        _networkAnim = GetComponent<NetworkAnimator>();
         timer = FindObjectOfType<Timer>();
         gsm = FindObjectOfType<GameSceneManager>();
         impSource = FindObjectOfType<CinemachineImpulseSource>();
         uiManager = FindObjectOfType<UIManager>();
+        uiManager.PlayerCore = this;
         paralyzedSymbol = transform.Find("Paralyzed").gameObject;
     }
 
@@ -187,30 +194,37 @@ public class PlayerCore : MonoBehaviour
         if (atkCombo == 1 || atkCombo == 0)
         {
             AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_1");
-            animator.SetTrigger("KnightAttack1");
+            _networkAnim.SetTrigger("KnightAttack1");
         }
         else if (atkCombo == 2)
         {
             AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_2");
-            animator.SetTrigger("KnightAttack2");
+            _networkAnim.SetTrigger("KnightAttack2");
         }
         else if (atkCombo == 3)
         {
             AudioManager.instance.PlaySFX(knightAudio, "Knight_Attack_3");
-            animator.SetTrigger("KnightAttack3");
+            _networkAnim.SetTrigger("KnightAttack3");
         }
         MeleeAttack(knightAtkPoint.position, knightAtkRange, knightDamage, atkCombo);
     }
 
     public void ArcherAttack()
     {
-        animator.SetTrigger("ArcherAttack");
+        _networkAnim.SetTrigger("ArcherAttack");
     }
 
+    [ServerRpc]
     public void ArcherShoot(Vector3 mousePosition, int max, int min, int damage)
     {
-        animator.ResetTrigger("ArcherAttack");
-        animator.SetTrigger("ArcherShooted");
+        ArcherActualShoot(mousePosition, max, min, damage);
+    }
+
+    [ObserversRpc]
+    public void ArcherActualShoot(Vector3 mousePosition, int max, int min, int damage)
+    {
+        //animator.ResetTrigger("ArcherAttack");
+        _networkAnim.SetTrigger("ArcherShooted");
         archerAimDirection = (mousePosition - transform.position).normalized;
         float angle = Mathf.Atan2(archerAimDirection.y, archerAimDirection.x) * Mathf.Rad2Deg;
         archerAim.eulerAngles = new Vector3(0, 0, angle);
@@ -221,6 +235,7 @@ public class PlayerCore : MonoBehaviour
         archerAimDirection = randAngle * archerAimDirection;
         Vector3 offset = new Vector3(archerAim.position.x, archerAim.position.y, archerAim.position.z);
         GameObject arrow = Instantiate(this.arrow, offset, archerAim.rotation);
+        //Spawn(this.arrow);
         arrow.transform.position = archerAim.position;
         arrow.GetComponent<Arrow>().dmg = damage;
         arrow.GetComponent<Arrow>().direction = archerAimDirection;
@@ -229,7 +244,7 @@ public class PlayerCore : MonoBehaviour
 
     public void AssassinAttack()
     {
-        animator.SetTrigger("AssassinAttack");
+        _networkAnim.SetTrigger("AssassinAttack");
         AudioManager.instance.PlaySFX(AssassinAudio, "Assassin_Attack");
         MeleeAttack(assassinAtkPoint.position, assassinAtkRange, assassinDamage, 1);
     }
@@ -326,17 +341,17 @@ public class PlayerCore : MonoBehaviour
                 if (playerState == Character.KNIGHT)
                 {
                     gameStats.state = Character.KNIGHT;
-                    animator.SetTrigger("KnightDeath");
+                    _networkAnim.SetTrigger("KnightDeath");
                 }
                 else if (playerState == Character.ARCHER)
                 {
                     gameStats.state = Character.ARCHER;
-                    animator.SetTrigger("ArcherDeath");
+                    _networkAnim.SetTrigger("ArcherDeath");
                 }
                 else if (playerState == Character.ASSASSIN)
                 {
                     gameStats.state = Character.ASSASSIN;
-                    animator.SetTrigger("AssassinDeath");
+                    _networkAnim.SetTrigger("AssassinDeath");
                 }
 
                 gameStats.time = timer.timerText.text;

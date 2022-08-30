@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     [Header("Knight")]
     float hitTime = 0.5f;
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     [Space(20)]
     public Vector2 movement;
-    public Vector3 mousePos;
+    [SyncVar] public Vector3 mousePos;
 
     void Awake()
     {
@@ -35,8 +37,12 @@ public class PlayerController : MonoBehaviour
         uiManager = FindObjectOfType<UIManager>();
     }
 
+
     void Update()
     {
+        if (!base.IsOwner)
+            return;
+
         if (!playerCore.isParalyzed)
         {
             movement.x = Input.GetAxisRaw("Horizontal");
@@ -47,10 +53,7 @@ public class PlayerController : MonoBehaviour
                 playerCore.SwitchCharacter();
             }
 
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 aimDir = (mousePos - transform.position).normalized;
-            float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
-            aim.eulerAngles = new Vector3(0, 0, angle);
+            AimDirection();
 
             Attack();
 
@@ -62,6 +65,14 @@ public class PlayerController : MonoBehaviour
     {
         if (!playerCore.assassinShowtime)
             rb.MovePosition(rb.position + movement.normalized * playerCore.speed * Time.fixedDeltaTime);
+    }
+
+    public void AimDirection()
+    {
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 aimDir = (mousePos - transform.position).normalized;
+        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        aim.eulerAngles = new Vector3(0, 0, angle);
     }
 
     public void Attack()

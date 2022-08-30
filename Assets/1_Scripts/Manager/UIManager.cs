@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text KnightText, ArcherText, AssassinText, MaxHealthText, CurrentHealthText, MaxShieldText, CurrentShieldText;
 
     PlayerCore playerCore;
+    public PlayerCore PlayerCore { get { return playerCore; } set { playerCore = value; } }
 
     private void Awake()
     {
@@ -22,6 +23,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (playerCore == null)
+            return;
+
         if (playerCore.knightSkill)
         {
             KnightCD.fillAmount += 1.0f / playerCore.knightCDTime * Time.deltaTime;
